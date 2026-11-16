@@ -1,0 +1,1241 @@
+                                                                       Mitigating long queues and waiting times with service resetting
+
+                                                                                     Ofek Lauber Bonomo1 , Arnab Pal2 and Shlomi Reuveni1
+                                                                  1
+                                                                      School of Chemistry, Raymond and Beverly Sackler Faculty of Exact Sciences & The Center for
+                                                                       Physics and Chemistry of Living Systems & The Ratner Center for Single Molecule Science,
+                                                                                           Tel Aviv University, Tel Aviv 6997801, Israel and
+                                                                         2
+                                                                           Department of Physics, Indian Institute of Technology, Kanpur, Kanpur 208016, India
+                                                                                                       (Dated: November 4, 2021)
+                                                                     What determines the average length of a queue which stretches in front of a service station? The
+                                                                  answer to this question clearly depends on the average rate at which jobs arrive to the queue and
+
+
+
+
+arXiv:2111.02097v1 [cond-mat.stat-mech] 3 Nov 2021
+                                                                  on the average rate of service. Somewhat less obvious is the fact that stochastic fluctuations in
+                                                                  service and arrival times are also important, and that these are a major source of backlogs and
+                                                                  delays. Strategies that could mitigate fluctuations induced delays are in high demand as queue
+                                                                  structures appear in various natural and man-made systems. Here we demonstrate that a simple
+                                                                  service resetting mechanism can reverse the deleterious effects of large fluctuations in service times,
+                                                                  thus turning a marked drawback into a favourable advantage. This happens when stochastic fluc-
+                                                                  tuations are intrinsic to the server, and we show that the added feature of service resetting can
+                                                                  then dramatically cut down average queue lengths and waiting times. While the analysis presented
+                                                                  herein is based on the M/G/1 queueing model where service is general but arrivals are assumed
+                                                                  to be Markovian, Kingman’s formula asserts that the benefits of service resetting will carry over
+                                                                  to queues with general arrivals. We thus expect results coming from this work to find widespread
+                                                                  application to queueing systems ranging from telecommunications, via computing, and all the way
+                                                                  to molecular queues that emerge in enzymatic and metabolic cycles of living organisms.
+
+
+                                                                        I.   INTRODUCTION
+                                                                                                                            𝝀
+                                                                                                                                   (a)      𝝀                    𝝀
+                                                                                                                                                                        (b)       𝝀
+
+                                                        Queueing theory is the mathematical study of waiting
+                                                     lines [1–4]. Ranging from the all familiar supermarket
+                                                     and bank, to call centers [5, 6], airplane boarding [7–9],
+                                                     telecommunication and computer systems [10–15], pro-
+                                                     duction lines and manufacturing [16–19], enzymatic and
+                                                     metabolic pathways [20–27], gene expression [28–34], and                     Service                              Service
+                                                     in transport phenomena [35–46], waiting lines and queues                      Time                                 Time
+                                                     appear ubiquitously and play a central role in our lives.
+                                                     While the teller at the bank works at a (roughly) con-
+                                                     stant rate, other servers, e.g., computer systems [14], and
+                                                     molecular machines like enzymes [47–52], often display
+                                                     more pronounced fluctuations in service times. These              FIG. 1. Backlogs and delays caused by service time fluctua-
+                                                     fluctuations have a significant effect on queue perfor-           tions can be mitigated with service resetting. Panel (a): The
+                                                     mance [1–4]: higher fluctuations in service times will re-        mean number of agents—jobs, customers, molecules, etc.—
+                                                     sult in longer queues as illustrated in Fig. 1a. Service          in a queue is sensitive to stochastic fluctuations in the service
+                                                     time variability is thus a major source of backlogs and           time provided by the server (computer, cashier, enzyme, etc.).
+                                                                                                                       For a given arrival rate and mean service time, the queue
+                                                     delays in queues [14], and this problem is particularly
+                                                                                                                       stretching in front of the server whose service time distribu-
+                                                     acute when encountering heavy tailed workloads [53].              tion is more variable will be longer on average, as illustrated
+                                                        Different strategies have been developed to mitigate           by the blue and red servers in the figure. Panel (b): We show
+                                                     the detrimental effect caused by stochastic service time          that when large service time fluctuations are intrinsic to the
+                                                     fluctuations. In particular, when considering single              server, resetting the service process can lower both the mean
+                                                     server queues, various scheduling policies can be applied         and variance of the service time and drastically improve queue
+                                                                                                                       performance.
+                                                     to reduce waiting times. For example, computer servers
+                                                     can be designed to serve smaller jobs first, rather than by
+                                                     order of arrival. While this policy can be criticized from
+                                                     the standpoint of fairness, it does reduce average waiting        service time is served [54]. This policy can be proven
+                                                     times by preventing situations where typically sized jobs         optimal under certain conditions [57].
+                                                     (which are common) get stuck behind a single job that is            The problem with the above-mentioned scheduling
+                                                     very large [14]. In situations where service can be stopped       policies is that they are ill-equipped to deal with situ-
+                                                     and continued from the same point at a later time, one            ations where fluctuations in service times are intrinsic to
+                                                     can further improve performance by implementing a pol-            the serves itself. These are in fact prevalent. For exam-
+                                                     icy in which only the job with the shortest remaining             ple, stochastic optimization algorithms can take wildly
+                                                                                                                          2
+
+different times to solve two instances of the exact same        Khinchin formula which provides the mean number of
+problem [58]. Similarly, the time it takes an enzyme            jobs in the M/G/1 queue at the steady-state, highlight-
+to catalyze a given chemical reaction varies considerably       ing the sensitivity of the latter to service time fluctua-
+between turnover cycles — despite the fact that the in-         tions. Finally we provide a short overview of existing
+coming (substrate) and outgoing (product) molecules are         scheduling strategies aimed to mitigate service time fluc-
+chemically identical [47–52]. Crucially, in these and sim-      tuations. In Sec. III, we discuss the service resetting
+ilar cases the total service time of an incoming job is         policy and formulate the M/G/1 model with service re-
+unknown a priori and the time remaining for a job in            setting. We show the latter can be mapped onto the
+service cannot be determined. Sized-based scheduling            standard M/G/1 queue, but with a modified service time
+policies are thus impossible to implement, which calls          distribution that depends on the underlying distributions
+for the development of new and novel approaches to the          of the service and resetting times. This fact allows us to
+problem.                                                        re-apply the Pollaczek-Khinchin formula to study how
+   In this paper we propose a complementary approach to         the mean number of jobs in the queue depends on the
+solve the problems caused by service time fluctuations in       resetting protocol. We focus on two prominent resetting
+queueing systems. Namely, we show that implementing a           protocols for which we provide detailed analysis: In Sec.
+simple service resetting policy can reverse the deleterious     IV we consider Poissonian resetting. i.e., resetting at a
+effect of stochastic fluctuations when the latter are large     constant rate. We show that when the variability in the
+and particularly harmful. The policy, which consists of         underlying service time distribution is high, the mean
+random or deterministic resetting of the service process,       number of jobs in the system obtains a minimum as a
+may seem counterintuitive at first. After all, no bene-         function of the resetting rate. This means that resetting
+fit can possibly come from doing the exact same thing           can drastically improve queue performance. Similarly, in
+all over again. However, here we show that when ser-            Sec. V we study resetting at fixed time intervals (a.k.a
+vice time fluctuations are intrinsic to the server itself, in   sharp resetting), and show that while this resetting pro-
+the sense that jobs whose service has been reset are as-        tocol leads to similar qualitative results, the fixed inter-
+signed fresh service times, service resetting can be used       resetting time duration can be tuned to perform better
+to drastically improve queue performance as illustrated         than any other stochastic resetting protocol (Poissonian
+in Fig. 1b. Indeed, it has recently been shown that reset-      resetting included). In Sec. VI we illustrate the gen-
+ting has the ability to expedite the completion of random       eral results obtained for two well-established service time
+processes: from stochastic optimization [60–63], via first-     distributions, namely the log-normal and Pareto distri-
+passage and search [64–80], and onto chemical reactions         bution, which are considered respectively in subsections
+[81–83], and this general principle is hereby exploited in      VI A and VI B. We end in Sec. VII with conclusions and
+the context of queueing.                                        outlook.                                      Rt
+   A different way in which resetting can be used to af-           In what follows we use fZ (t), qZ (t) = 1 − 0 dτ fZ (τ ),
+fect queue performance is by resetting of the jobs arrival      hZi, Var(Z), and Z̃(s) ≡ he−sZ i to denote, respectively,
+process, which is interesting to consider e.g., in the con-     the probability density function, the survival function,
+text of intracellular transport [84]. However, resetting        expectation, variance, and Laplace transform of a non-
+the arrival process has no affect on service time fluctu-       negative random variable Z.
+ations, which is further compounded by the fact that in
+most conventional queue structures the arrival process is
+extrinsic to the system and is thus not subject to control      II.   QUEUES: MODELS AND PRELIMINARIES
+or optimization. We thus focus on queues with service
+resetting to which we devote this paper. Before mov-              Consider a queuing system that is composed of a queue
+ing forward to develop the theory and discuss examples,         in which jobs await to be served, and a server which
+we mention in passing that the concept of resetting is          serves one job at a time according to a First-Come, First-
+also relevant in the context of queues with catastrophic        Served policy (FCFS). A queue can be identified as a
+events [85–99]. Note, however, that such catastrophic           stochastic process whose state space is denoted by the
+events lead to mass annihilation of jobs (agents) from the      set N = {0, 1, 2, 3, ...}, where the value corresponds to
+queue. Contrary, service resetting conserves the number         the number of jobs in the queue, including the one be-
+of jobs in the queue, as jobs whose service was reset would     ing served. In particular, an M/G/1 queue (written in
+still require full service before they can leave the system.    Kendall’s notation [100]) consists of a single server and
+Thus, ‘resetting by catastrophe’ should not to be con-          queue to which jobs arrive according to a Poisson process
+fused with the service resetting policy that is introduced      with rate λ [13, 14]. Thus, M stands for Markovian or
+and rigorously analyzed below.                                  memory-less arrival process. No assumptions are made
+   The remainder of this paper is structured as follows. In     on the service time of jobs, which comes from a general
+Sec. II, we provide a brief review of the M/G/1 queuing         distribution (hence the G in Kendall’s notation). De-
+model for which queue arrivals are Markovian and service        noting the service time by the random variable S (for
+is general. This queue will serve as the main modeling          service), whose density we denote by fS (t), we define the
+platform of this paper. We also review the Pollaczek-           service rate µ ≡ 1/hSi. It will prove convenient to intro-
+                                                                                                                        3
+
+duce the utilization parameter ρ = λ/µ, which gives the        arrival as e.g. happens in the supermarket. This sim-
+fraction of time the server is working (not idle) in the       ple First-Come, First-Served policy (FCFS) seems fair
+steady state [14]. The model attains a steady state as         when working with people as customers. However, when
+long as the arrival rate is smaller than the service rate,     considering queues of inanimate objects, fairness is not
+i.e, ρ < 1. For ρ > 1 the queue grows indefinitely long        necessarily the most important requirement and other
+with time and the system does not attain a steady state.       service policies can also be considered.
+Thus, in what follows we will assume ρ < 1.
+   The number of jobs in an M/G/1 queue fluctuates with
+                                                                  The FCFS policy is an example of a non-sized-based
+time. Thus, it is only natural to start the discussion with
+                                                               policy — the server serves jobs based on their order of ar-
+the average of this observable. The mean number of jobs
+                                                               rivals rather than their size. However, in situations where
+hN i in the system (queue+server) is given by the famous
+                                                               jobs sizes are known, one can utilize this knowledge to de-
+Pollaczek-Khinchin formula [14]
+                                                               vise size-based policies such as Shortest-Job-First (SJF).
+                     ρ      ρ2                                 According to this policy, once free, the server chooses to
+                                  CV 2 − 1 ,
+                                          
+          hN i =        +                               (1)    work on the job with the smallest size and hence also the
+                   1 − ρ 2(1 − ρ)
+                                                               shortest service time. In terms of the average waiting
+where ρ is the utilization, and CV 2 = Var(S)/hSi2 is          time of a job in the queue, the SJF policy performs bet-
+the squared coefficient of variation or the variability in     ter than the FCFS policy [14]. This can be understood
+service time. As expected, the mean number of jobs is a        intuitively. In the FCFS policy, all jobs that arrive after
+monotonically increasing function of the utilization, with     a very large job will suffer from a long waiting time. This
+hN i tending to infinity as ρ → 1− . Thus, as expected,        will not happen in the SJF policy, where extremely large
+low service rates lead to long queues. Note, however, the      jobs which are rare will not be selected for service before
+appearance of CV 2 in the second term of Eq. (1). This         jobs of typical size. The latter are much more common
+indicates that the mean length of the queue is highly          and since they are served first they spend less time in
+sensitive to stochastic fluctuations in the service time,      the queue, resulting in smaller waiting times on average
+which is a non-trivial effect that can be explained by the     compared to Eq. (2).
+inspection paradox [14].
+   From the second term in Eq. (1), we see that the mean
+number of jobs is a monotonically increasing function             In the SJF policy, the server chooses the smallest job
+of CV 2 . Note, that when CV < 1, i.e., when service           waiting in the queue each time service is complete. This
+time fluctuations are relatively small, the contribution of    approach can be further developed allowing the server
+the second term is negative, leading to shorter queues.        to inspect jobs’ sizes (including the one in service) con-
+On the other hand, when CV > 1, i.e., when service             tinuously in time—constantly searching for the job with
+time fluctuations are relatively large, the contribution       the shortest remaining service time. In such a queue,
+of the second term is positive, leading to longer queues.      an arriving job can preempt the job in service if its own
+Importantly, there can be a “piling up” of jobs due to         service time is lower. The service of the preempted job
+high service time variability. This can happen, for ex-        is resumed later, starting from the point where it was
+ample, if short service times are occasionally followed by     stopped. The above policy is called Shortest-Remaining-
+extremely-long service times. In such situations, CV 2 is      Processing-Time (SRPT) [54], and it was used e.g in web
+large, resulting in long queues, even in low utilization.      servers to reduce the waiting time of static HTTP re-
+It is thus apparent that fluctuations in the service time      quests whose sizes have been shown to follow a heavy-
+play a central role in the behavior of M/G/1 queues.           tailed distribution [55, 56]. It was proved in [57], that
+   Finally, we recall that the mean waiting time hT i of a     in single-server queues where the service time of jobs is
+job in the queue, i.e., the time elapsed from arrival to the   known and preemption is possible, the SRPT policy is
+end of service, follows from Eq. (1) by using Little’s law     the optimal policy with respect to minimizing the mean
+[14] which states hT i = λ−1 hN i. Thus, we have               waiting time.
+
+                    1/µ    ρ/µ
+                                  CV 2 − 1 ,
+                                          
+          hT i =        +                               (2)      Having readily available knowledge of job sizes and
+                   1 − ρ 2(1 − ρ)
+                                                               their remaining service times, as well as the ability to
+and note that similar to the mean number of jobs, the          preempt jobs, is a luxury not shared by all queueing sys-
+mean waiting time crucially depends on fluctuations in         tems. For example, in non-deterministic algorithms, e.g.,
+service time.                                                  stochastic optimization methods, inputs of similar size
+  To deal with the detrimental effect caused by service        can render significantly different run times [58], and the
+time fluctuations several different strategies have been       same can happen for consecutive runs of the algorithm
+developed. When considering single server queues, the          using the same input. Sized-based scheduling policies like
+main tools at our disposal are scheduling policies (a.k.a      the SJF and SRPT are then inapplicable, but we will
+service policies) [102]. A scheduling policy is the rule       hereby show that the intrinsic randomness of the service
+according to which jobs are served in a queue. For exam-       process can be exploited via service resetting to achieve
+ple, servers can serve jobs according to the order of their    similar performance goals.
+                                                                                                                          4
+
+      III.   M/G/1 QUEUES WITH SERVICE                          the server. As explained above, in these queues reset-
+                   RESETTING                                    ting results in a newly drawn service time that is added
+                                                                to the time already spent in service. In what follows,
+   In Sec. II we reviewed the non-trivial dependence, of        we will quantify the effect of resetting on the mean and
+the mean number of jobs in an M/G/1 queue, on ser-              variance of the total service time. We will then go on
+vice time fluctuations. Namely, large relative fluctuations     to show that in certain situations resetting significantly
+lead to long queues. In this section, we analyze the ef-        expedites service, thus improving overall performance by
+fect of service resetting on the mean and variance of the       shortening queues. This effect will be discussed in the
+service time.                                                   next section.
+   To understand how restarting service affects the overall        Let us consider an M/G/1 queue with service reset-
+service time of a job, we consider two extreme scenarios.       ting. Assume that both the service and restart times are
+First, consider a situation where fluctuations in service       two independent and generally distributed random vari-
+times are extrinsic to the server. Thus, imagine a server       ables. The total service time under restart, SR , is then
+that serves jobs of variable size at a constant rate. In this   described by the following renewal equation
+case, the service time is determined exclusively by the job
+size, i.e., the bigger the job the longer the service time,
+                                                                                  
+                                                                                  S              if S < R ,
+and vice versa. An example of such would be a supermar-                    SR =                                         (3)
+ket cashier counter. The teller serves the customers at                            R + S0        if R ≤ S ,
+                                                                                           R
+a (roughly) constant rate, and the service time is deter-
+mined by the number of items each customer has. Thus,
+the fluctuations in service time originate solely from the      where R is the random resetting time drawn from a dis-
+                                                                                                     0
+variability in the number of items each customer brought.       tribution with density fR (t), and SR  is an independent
+Imagine now that the teller decides to restart service from     and identically distributed copy of SR . To understand
+time to time. Since restart does not affect the number of       this equation, observe that when service occurs before
+items one has, this strategy is clearly detrimental. The        restart, SR = S. However, if service is restarted at a
+time already spent in service is lost, while the customer’s     time R ≤ S, then a new service time is drawn, and ser-
+                                                                                                           0
+required service time remains unaltered. Thus, restart          vice starts over. In this case, SR = R + SR  .
+results in wasted time and delays.                                 Service can be seen as a first passage process which
+   Now, consider a queue in which fluctuations in service       ends when a job is served. A comprehensive framework
+times are intrinsic to the server, i.e., a queue in which all   for first passage under restart was developed in [68, 69].
+jobs are (roughly) identical but the time it takes to serve     In the following, we show how the results obtained there
+a job is nevertheless random. Example of such would be a        can be used to gain insight on the performance of an
+computer server which runs a stochastic algorithm. Such         M/G/1 queue under restart. Starting from Eq. (3), one
+algorithm employs probabilistic approaches to the solu-         can obtain the probability density of SR in Laplace space
+tion of mathematical problems, e.g., optimization. The          (Appendix A). Here, we will only be interested in the first
+run time of such an algorithm can vary considerably be-         two moments, which are given by (Appendix A)
+tween runs. Importantly, stochastic fluctuations in run
+times come from the probabilistic solution method, and                 hmin(S, R)i
+would hence differ even between identical instances of the      hSR i =            ,                            (4)
+                                                                        Pr(S < R)
+same problem. Thus, resetting such an algorithm in its
+course of action would result in a new and random run             2    hmin(S, R)2 i 2Pr(R ≤ S)hRmin ihmin(S, R)i
+                                                                hSR i=               +                            ,
+time, contrary to the case of a teller in a supermarket.                Pr(S < R)            Pr(S < R)2
+   Another example of a queue in which fluctuations in                                                          (5)
+service time are intrinsic to the server can be found in
+enzymatic reactions. In the context of enzymes, sub-            where min(S, R) is the minimum between S and R,
+strate molecules can be viewed as costumers, forming            Pr(S < R) is the probability of service being completed
+a ‘waiting line’ to the enzyme which acts as a server.          prior to restart, and Rmin = {R|R = min(R, S)} standing
+Substrate molecules are identical, and require the same         for the random restart time given that restart occurred
+type of service: a catalytic process which converts a sub-      prior to service. Finally, recall that the variance in the
+                                                                                                          2
+strate molecule to a product molecule. Yet, at the single       service time is given by Var(SR ) = hSR     i − hSR i2 which
+molecule level, chemistry is stochastic as thermal fluc-        will be useful in the next section. Equations (4) & (5) as-
+tuations render the service (catalysis) time random. It         sert that the mean and variance of the service time under
+is often the case that a substrate molecule unbinds the         restart can be evaluated directly from the distribution of
+enzyme without completing service [81]. In this case, ser-      the resetting time and the distribution of the service time
+vice is reset, and a new and random service time is drawn       without resetting. Importantly, in cases where this can-
+upon rebinding.                                                 not be done analytically, numerical methods can be used
+                                                                                        2
+   Motivated by the examples above, we will now consider        to obtain hSR i and hSR   i and as long as the distributions
+queues in which service time fluctuations are intrinsic to      of R and S are known or can be sampled from.
+                                                                                                                                                 5
+
+   IV.    M/G/1 QUEUES WITH POISSONIAN                                           2.0
+             SERVICE RESETTING
+                                                                                 1.8
+
+
+
+                                                                                                                                   CVr -Dashed
+                                                                                 1.6
+
+                                                                 〈Sr 〉 - Solid
+   Poissonian resetting, i.e., resetting with a constant
+rate, has been extensively investigated [64–79, 101, 104–                        1.4
+106] (see [80] for extensive review and [107] for discussion
+on the connection with the inspection paradox). As the                           1.2                 ●
+
+name suggests, here resetting follows a Poisson process                          1.0                 ●
+and the number of resetting events in a given time in-
+terval comes from the Poisson distribution. In this sec-                         0.8
+tion we quantify the effect of Poissonian resetting on the                                 1        r*       3        4        5
+mean and variance of the total service time and the mean
+length of an M/G/1 queue.                                                                          Resetting Rate
+   Consider an M/G/1 queue with a server that is
+restarted at a rate r. In other words, we take the restart     FIG. 2. The mean (solid line) and CV (dashed line) of
+                                                               the service time with Poissonian resetting as a function of
+time R to be an exponential random variable with mean
+                                                               the resetting rate. Plots were made, using Eqs. (6) and
+1/r, and restart is thus a Poisson process with rate r. The    (7), for an underlying service time taken from the inverse
+mean and second moment of the service time can then            Gaussian distribution whose density is given by fS (t) =
+be derived using Eqs. (4) and (5), giving (Appendix A 1)       p                2   2
+                                                                 γ/2πt3 e−γ(t−µ) /2µ t , t > 0. Here, µ = 2.5 and γ = 0.5.
+                                                               Observe that the mean service time with resetting, hSr i, is
+                        1 − S̃(r)
+              hSr i =             ,                     (6)    minimized at an optimal resetting rate r∗ ≃ 2.092 which was
+                          rS̃(r)                               found using Eq. (12). At this optimal resetting rate we have
+                                                               CVr∗ = 1.
+                                               
+                        2 r dS̃(r)
+                               dr   − S̃(r) + 1
+             hSr2 i =                               ,   (7)
+                                r2 S̃(r)2
+               R∞                                              fluctuations in service time. Starting from a service time
+where S̃(r) = 0 dt e−rt fS (t) is the Laplace transform        distribution with CV > 1, we introduce resetting and
+of the service time, evaluated at the restart rate r.          plot the mean service time hSr i vs. the resetting rate. As
+   The utilization of this queue is then given by ρr =         predicted by Eq. (9), we see that hSr i initially decreases,
+λhSr i, and the squared coefficient of variation of the ser-   obtaining a minimum at an optimal resetting rate r∗ . In
+vice time is CVr2 = Var(Sr )/hSr i2 . We can now write         addition, note that at this optimal resetting rate we have
+the mean queue length under restart by replacing ρ by          CVr∗ = 1. Remarkably, this observation is not specific
+ρr , and CV 2 by CVr2 , in Eq. (1). This yields                to the service time distribution considered in Fig. 2, but
+                                                               is rather a universal property. Namely, it can be shown
+                     ρr        ρ2r
+                                       CVr2 − 1 .              that [69]
+                                               
+         hNr i =          +                             (8)
+                   1 − ρr   2(1 − ρr )
+Similarly, the mean waiting time hTr i in the system can
+be derived from Little’s law [13, 14], yielding an analo-                                           CVr∗ = 1,                         (10)
+gous result to Eq. (2).
+   To better understand the effect of resetting on the         for any resetting rate, 0 < r∗ < ∞, at which
+mean queue length, consider the introduction of an in-
+finitesimal resetting rate δr. Utilizing Eq. (6), we then                                         dhSr i
+                                                                                                         = 0.                         (11)
+find                                                                                               dr r∗
+                           hSi2                               Substituting Eq. (6) into Eq. (11) yields
+                                  CV 2 − 1 + O(δr2 ).
+                                          
+       hSδr i ≃ hSi − δr                                (9)
+                            2
+As expected, the first term on the right hand side of                                  S̃ 2 (r∗ ) − S̃(r∗ ) − r∗ S̃ 0 (r∗ ) = 0,      (12)
+Eq. (9) is the mean of the original service time, i.e.,
+without resetting. The second term gives the first or-         which can be solved to obtain r∗ . Combining Eq. (10)
+der correction, and note that its sign is governed by CV 2     with the Pollaczek-Khinchin formula given in Eq. (8), we
+of the original service time. Specifically, for CV 2 > 1,      have
+we have hSδr i < hSi and vice versa. In other words, the                                     ρr∗
+introduction of Poissonian resetting to an M/G/1 queue                            hNr∗ i =          .              (13)
+                                                                                           1 − ρr ∗
+will reduce the mean service time whenever the coeffi-
+cient of variation of the original service time is greater     Note that the mean number of jobs at optimality is equiv-
+than unity.                                                    alent to the mean number of jobs in an M/M/1 queue
+   In Fig. 2, we consider a representative example for         [14], where job service times are exponentially distributed
+the effect of resetting on an M/G/1 queue with large           with mean hSr∗ i.
+                                                                                                                                            6
+
+  Comparing Eqs. (1) and (13), we observe that hN i >                                2.0
+hNr∗ i. One can easily derive this inequality by substitut-
+ing CV > 1 into Eq. (1). This yields                                                 1.8
+
+
+
+                                                                                                                                  CVτ -Dashed
+                                                                                     1.6
+
+                                                                     〈Sτ 〉 - Solid
+                ρ         ρ2                   ρ
+       hN i =        +           (CV 2 − 1) >
+              1 − ρ 2(1 − ρ)                  1−ρ                                    1.4
+                ρr ∗
+            >          = hNr∗ i,                            (14)                     1.2
+              1 − ρr ∗                                                                                       ●
+                                                                                     1.0                     ●
+where in the last inequality we used the monotonicity of
+              ρ
+the function 1−ρ on the interval [0, 1), and the optimality                          0.8
+    ∗
+of r , which implies hSr∗ i < hSi resulting in ρr∗ < ρ.                                    0.1   0.3         τ*       0.7   0.9
+   We see that whenever CV > 1 for the original ser-
+                                                                                                    Resetting time
+vice time, the mean number of jobs in the queue can be
+reduced by resetting service at an optimal rate. When
+                                                                    FIG. 3. The mean (solid line) and CV (dashed line) of
+doing so, one also sets the coefficient of variation of the
+                                                                    the service time with sharp resetting as a function of the
+optimally restarted service time to unity. Thus, reset-             resetting time. Plots were made, using Eqs. (15) and
+ting not only shortens the mean service time but also               (16), for an underlying service time taken from the Inverse
+reduces the relative stochastic fluctuations around this            Gaussian distribution whose density is given by fS (t) =
+mean, hence providing a double advantage.                           p                2   2
+                                                                      γ/2πt3 e−γ(t−µ) /2µ t , t > 0. Here, µ = 2.5 and γ = 0.5.
+                                                                    Observe that the mean service time with resetting, hSτ i, is
+                                                                    minimized at an optimal resetting time τ ∗ ≃ 0.501, which
+  V.   M/G/1 QUEUES WITH SHARP SERVICE                              was found using Eq. (20). At this optimal resetting time we
+                RESETTING                                           have CVτ ∗ ≤ 1.
+
+   So far, we considered queues with resetting at a con-
+stant rate. In what follows, we consider a different ex-            fluctuations in service time. Starting from the same ser-
+tensively investigated resetting strategy, namely sharp             vice time distribution used in Fig. 2 (CV > 1), we in-
+(a.k.a deterministic or periodic) resetting [69, 108–113].          troduce resetting and plot the mean service time hSτ i
+Strong motivation to study this strategy comes from the             vs. the resetting time. Once again, we observe that hSτ i
+fact that in terms of mean performance, sharp resetting             obtains a minimum at an optimal resetting time τ ∗ . In
+either matches, or outperforms any resetting strategy of            addition, note that at this optimal resetting time we have
+the type considered above Eq. (3) [69].                             CVτ ∗ < 1. As for the case of Poissonian resetting, this
+   To see this, let us now consider an M/G/1 queue where            observation is not specific to the service time distribution
+service is reset at fixed time intervals of length τ . This         considered in Fig. 3, but is rather a universal property.
+simply means that the resetting time R in Eq. (3) is taken          Namely, it can be shown that [69]
+from the distribution fR (t) = δ(t−τ ). Equations (4) and                                              CVτ ∗ ≤ 1,                 (18)
+(5), can then be simplified to give (Appendix A 2)
+                Rτ                                                  for an optimal resetting time τ ∗ which brings hSτ ∗ i to a
+                     dt qS (t)                                      global minimum. As before, τ ∗ can be found by setting
+       hSτ i = 0               ,                             (15)
+                  1 − qS (τ )
+                                  Z τ                                                              dhSτ i
+                h                                                                                          =0,                    (19)
+       hSτ2 i = 2(1 − qS (τ ))        dt tqS (t)                                                    dτ τ ∗
+                           Z τ 0          i
+                                                          2         which by substitution of Eq. (15) into Eq. (19), boils
+              + 2τ qS (τ )       dt qS (t) / [1 − qS (τ )] , (16)   down to
+                            0
+                       Rτ                                                                             Z τ∗
+where qS (τ ) = 1 − 0 dt fS (t) is the survival function                       ∗     2   ∗     0   ∗
+                                                                          qS (τ ) − qS (τ ) + qS (τ )      dt qS (t) = 0. (20)
+associated with the underlying service time.                                                                      0
+  The utilization of this queue is then given by ρτ =                Combining Eq. (18) with the Pollaczek-Khinchin for-
+λhSτ i, and the squared coefficient of variation of the ser-        mula given in Eq. (17), we have
+vice time is CVτ2 = Var(Sτ )/hSτ i2 . We can now obtain
+the mean queue length under service resetting by replac-                                                       ρτ ∗
+                                                                                                 hNτ ∗ i ≤            .           (21)
+ing ρ by ρτ , and CV 2 by CVτ2 , in Eq. (1). This yields                                                     1 − ρτ ∗
+
+                     ρτ        ρ2τ                                  It is interesting to compare Eqs. (21) and (13). To this
+                                       CVτ2 − 1 .
+                                               
+         hNτ i =          +                                 (17)    end, we recall that the mean first passage time under
+                   1 − ρτ   2(1 − ρτ )
+                                                                    optimal sharp resetting is always smaller or equal than
+In Fig. 3, we consider a representative example for the             that obtained under optimal Poissonian resetting [69].
+effect of sharp resetting on an M/G/1 queue with large              Translating this result to the language of queueing, we
+                                                                                                                                        7
+
+                                      ρτ ∗
+have hSτ ∗ i ≤ hSr∗ i, which implies 1−ρ       ρr∗
+                                            ≤ 1−ρ    , by                                            r*       1/τ*
+                                         τ∗       r∗                              1.00
+monotonicity. We thus have
+
+
+
+
+                                                              Mean service time
+                     hNτ ∗ i ≤ hNr∗ i.                (22)                        0.95
+  Equation (22) is of great importance as it reveals that                                                                       Sharp
+                                                                                                      ●
+sharp resetting offers an additional improvement com-                             0.90
+                                                                                                                                Poisson
+pared to the Poissonian resetting strategy. Once again,
+we see that whenever CV > 1 for the original service
+time, the mean number of jobs in the queue can be re-                             0.85                         ●
+
+
+duced by resetting service at an optimal time. When                                      0   0.5          1          1.5   2
+doing so, one also reduces the coefficient of variation of                          Resetting rate, reciprocal resetting time
+the optimally restarted service time below unity. Thus,
+sharp resetting further shortens the mean service time,        FIG. 4. The mean service time with Poissonian (orange) and
+while also reducing the relative stochastic fluctuations       sharp (blue) resetting, as a function of the resetting rate and
+around this mean compared to Poissonian resetting. We          reciprocal resetting time. Plots were made, using Eqs. (6)
+now set out to illustrate the results obtained in sections     and (15), for an underlying service time taken from the log-
+IV and V on several case studies.                              normal distribution whose density is given by Eq. (23). Here,
+                                                               hSi = 1 and σ = 1.05, yielding µ = −0.28125. The optimal
+                                                               resetting rate, r∗ , and resetting time, τ ∗ , are indicated.
+                   VI.   EXAMPLES
+
+                                                                  For Poissonian resetting, the mean service time is given
+  To demonstrate the power of our approach, we now
+                                                               by Eq. (6), which requires the Laplace transform of the
+consider two well-known service time distributions: log-
+                                                               log-normal distribution. The latter, does not have an an-
+normal [114–116] and Pareto [117–121], which are now
+                                                               alytical closed-form, but it can be evaluated numerically
+well documented in queuing theory literature [122–131].
+                                                               for any choice of parameters. In the case of sharp reset-
+In what follows, we first describe the effect of restart in
+                                                               ting, the mean service time is given by Eq. (15), which
+the case of log-normal service times and discuss Pareto
+                                                               requires the survival function qS (t) given in Eq. (24).
+service times next.
+                                                               Here too, the mean service under resetting can be com-
+                                                               puted by numerical evaluation of the required integrals.
+             A.   Log-normal service time
+                                                               In Fig. 4, we set hSi = 1 and σ = 1.05, and plot the
+                                                               mean service time under Poissonian and sharp resetting.
+                                                               In both cases, a minimum is obtained at an optimal re-
+  Consider the case of on an M/G/1 queue whose service         setting rate or time, depending on the resetting scheme.
+time S is log-normally distributed                             Observe that the optimal mean service time under sharp
+                             1     (ln t−µ)2                   resetting is indeed lower than that obtained for Poisso-
+               fS (t) = √        e− 2σ2 ,             (23)     nian resetting.
+                            2πσt
+                                                                  To find the optimal resetting rate in Fig. 4, we solve
+for t > 0, where µ ∈ (−∞, ∞) and σ > 0. The survival
+function is then given by                                                                          H(hSi, σ, r∗ ) = 0,            (28)
+                         (                    
+                           1
+                             Erfc   − µ−log(t)
+                                       √         t>0           where H(hSi, σ, r∗ ) denotes the left hand side of Eq. (12).
+     qS (t) = Pr(S > t) = 2              2σ          (24)      This gives r∗ ≃ 0.885 for the given parameters. A simi-
+                          1                      t≤0
+                                                               lar minimization procedure can be carried out for sharp
+The mean and variance of the service time in this case         resetting. Substitution of the survival function for the
+are given by                                                   log-normal distribution given in Eq. (24) into Eq. (20)
+                                                               yields the following equation for the optimal resetting
+                               σ2
+               hSi   = eµ+ 2 ,                        (25)     time τ ∗
+                        2        2
+              Var(S) = eσ − 1 e2µ+σ ,                 (26)                                         F(hSi, σ, τ ∗ ) = 0,           (29)
+such that                                                      where F(hSi, σ, τ ∗ ) denotes the left hand side of Eq. (20).
+                                2
+                     CV 2 = eσ − 1 ,                  (27)     This gives τ ∗ ≃ 0.857.
+                                                                  Once in hand, the optimal resetting rate r∗ can be sub-
+which is independent of µ. In the discussion below, we         stituted into Eqs. (6) and (7), to obtain the mean and
+set the mean service time hSi to be fixed, and vary σ,         variance of the service time under optimal Poissonian re-
+which controls the relative magnitude of fluctuations in       setting. Similarly, τ ∗ can be substituted into Eqs. (15)
+service time via Eq. (27). Setting hSi and σ, µ is uniquely    and (16), for the mean and variance of the service time
+determined by Eq. (25).                                        under optimal sharp resetting. Once these quantities
+                                                                                                                                                                                 8
+
+                                                                                                                30
+
+
+                                          ℋ(〈S〉,σ,r)
+                                                                                                                                                       la
+                                                            0                                                                                       mu
+
+
+
+
+                                                                                          Mean number of jobs
+                0.4                                                                                             25                            f o r
+                                                       -10-2
+                                                                                CV≃0.87                                                  PK
+
+
+  ℱ(〈S〉,σ,τ)
+                                                                                                                20
+                0.2                                                                                                              ●
+                                                             0 0.5 1 1.5        CV≃1.03
+                                                            Resetting rate                                      15           ●
+
+                0.0                                                             CV≃1.21                                                       ●
+                                                                                                                10
+                                                                                                                                 ●
+
+                                                                                                                                                                Poisso
+                                                                                                                                              ●             ●         nian
+               -0.2       (a)                                                   CV≃1.42                          5   (b )                                   ●            ●
+                                                                                                                                                                  Sharp ●
+                                                                                CV≃1.66
+                      0         1     2                3        4   5    6                                       0               1                          2                3
+                                      Resetting time                                                                    Squared coefficient of variation
+
+FIG. 5. Panel (a): Solutions of Eqs. (28) and (29) for the Log-normal service time distribution under Poissonian (inset) and
+sharp resetting (main). Here, we fix hSi = 1 for the mean service time without resetting and vary σ to control relative stochastic
+fluctuations, CV , via Eq. (27). The intersection points of the curves with the dashed horizontal line going through the origin
+give the optimal restart times τ ∗ (optimal restart rates r∗ in the inset). Note that higher values of σ yield lower optimal
+resetting times (higher resetting rates). Panel (b): The mean number of jobs in the queue as a function of the underlying CV 2
+of the service time distribution. The Pollaczek-Khinchin formula gives the familiar linear dependence of Eq. (1). Also plotted
+are the behaviours for the optimal Poissonian and sharp resetting protocols, with colored circles matching their counterparts
+in panel (a). Strong deviations from the Pollaczek-Khinchin behaviour of the non-restarted case are observed. While resetting
+provides no advantage for low CV values, it can drastically reduce queue lengths when CV is high.
+
+
+are known, and given the arrival rate λ, the Pollaczek-                             for t ≥ L, where α, L > 0. The survival function is given
+Khinchin formula can be used directly to obtain the the                             by
+mean number of jobs in a queue with optimal service                                                         ( −α
+resetting.                                                                                                      t
+                                                                                                                L      t≥L
+                                                                                                  qS (t) =                   .           (31)
+   In Fig. 5, we extend the analysis presented in Fig. 4.                                                     1        t<L
+Setting hSi = 1, we compute the optimal resetting rate
+and time for various values of the parameter σ (Fig. 5a),                             The mean and variance of the service time in this case
+which controls the relative fluctuations in the log-normal                          are given by
+service time via Eq. (27). We then compare between                                                     (
+the mean number of jobs in a queue without service re-                                                   ∞      for α ≤ 1
+setting to that obtained when optimal Poissonian and                                           hSi =      αL              ,             (32)
+                                                                                                         α−1    for α > 1
+sharp resetting are applied (Fig. 5b). We observe that                                                 (
+resetting can drastically shorten queues when stochas-                                                   ∞             for α ≤ 2
+tic fluctuations in the underlying service time are large                                    Var(S) =        αL2                 ,      (33)
+                                                                                                         (α−1)2 (α−2)  for α > 2
+(high CV ). To this end, note that optimal sharp resetting
+outperforms optimal Poissonian resetting as predicted by                            such that
+Eq. (22). Also, note that for high CV values the mean
+queue lengths at optimal resetting drop below the mean                                                                                      1
+                                                                                                                            CV 2 =                ,                          (34)
+queue length in the absence of service time fluctuations                                                                                 α(α − 2)
+(CV = 0). This remarkable feature illustrates how reset-
+ting turns the problem of service time fluctuations into                            which is independent of L. Similar to the previous ex-
+an advantageous benefit.                                                            ample, we now set the mean service time hSi to be fixed,
+                                                                                    and vary α, which controls the relative magnitude of fluc-
+                                                                                    tuations in service time via Eq. (34). Setting hSi and α,
+                                                                                    L is uniquely determined by Eq. (32).
+                                                                                      For Poissonian resetting, the mean service time is given
+                            B.      Pareto service time
+                                                                                    by Eq. (6), which requires the Laplace transform of the
+                                                                                    Pareto distribution. This is given by
+
+  We now consider the case of on an M/G/1 queue whose                                                                   S̃(r) = α(Lr)α Γ(−α, Lr),                            (35)
+service time S is Pareto distributed
+                                                                                    where Γ(a, x) is the upper incomplete gamma function
+                                                                                                             Z ∞
+                                                       αLα                                         Γ(a, x) =      dt tα−1 e−t .       (36)
+                                    fS (t) =                ,                (30)
+                                                       tα+1                                                                          x
+                                                                                                                                               9
+
+By substituting the above into Eqs. (6) and (7), we get                                               r*                  1/τ*
+the following expressions for the mean
+                                                                                         1.05
+
+
+
+
+                                                                     Mean service time
+                        1 − α(Lr)α Γ(−α, Lr)
+                hSr i =                      ,                (37)
+                          αr(Lr)α Γ(−α, Lr)
+                                                                                           1          ●                                Sharp
+and second moment
+                                                                                                                                       Poisson
+             2α(α − 1)(Lr)    Γ(−α, Lr) − 2αe−Lr + 2
+                                α
+    hSr2 i =                                         ,(38)                               0.95                              ●
+                       (αr) (Lr)2α Γ(−α, Lr)2
+                        2
+
+
+of the service time under Poissonian resetting.                                            0.01              0.1          0.5    1
+   In the case of sharp resetting, the first two moments of                                Resetting rate, reciprocal resetting time
+the service time are given by Eqs. (15) and (16). Substi-
+tuting the survival function (31) into Eqs. (15) and (16)             FIG. 6. The mean service time with Poissonian (orange) and
+yields                                                                sharp (blue) resetting, as a function of the resetting rate and
+                                                                      reciprocal resetting time. Plots were made, using Eqs. (37)
+            Lα         Lα − τ                                         and (39), for an underlying service time taken from the Pareto
+hSτ i =         +                ,                           (39)
+           α − 1 (α − 1) Lτ α − 1                                     distribution whose density is given by Eq. (30). Here, hSi = 1
+                         
+                                                                      and α = 2.1, yielding L ≃ 0.524. The optimal resetting rate,
+            2τ 2 Lα (Lα − (α − 1)τ α )           2ατ α+1 Lα+1         r∗ , and resetting time, τ ∗ , are indicated.
+hSτ2 i =                                  +
+           (α − 2)(α − 1) (τ α − L )  α 2                       2
+                                              (α − 1) (τ α − Lα )
+                  αL2 τ α
+           +                     .                            (40)    sharp resetting. Once these quantities are known along
+             (α − 2) (τ α − Lα )
+                                                                      with the arrival rate λ, the Pollaczek-Khinchin formula
+Note that in the above we only considered resetting times             can be used directly to obtain the the mean number of
+τ > L as the support of the Pareto distribution is given              jobs in a queue with optimal service resetting.
+by t ≥ L. Also, note that Eq. (39) is valid for α 6= 1.                  In Fig. 7, we extend the analysis presented in Fig.
+Similarly, in Eq. (40) we require α 6= 1, 2. These sin-               6. Setting hSi = 1, we compute the optimal resetting
+gular cases require separate treatment, following similar             rate and time for various values of the parameter α (Fig.
+footsteps.                                                            7a), which controls the relative fluctuations in the Pareto
+  In Fig. 6, we set hSi = 1 and α = 2.1, and plot the                 service time via Eq. (34). We then compare between
+mean service time under Poissonian and sharp resetting.               the mean number of jobs in a queue without service re-
+In both cases, a minimum is obtained at an optimal re-                setting to that obtained when optimal Poissonian and
+setting rate or time, depending on the resetting scheme.              sharp resetting are applied (Fig. 7b). Like in the pre-
+Once again, the optimal mean service time under sharp                 vious example, here too, we observe that resetting can
+resetting is indeed lower than that obtained for Poisso-              induce shorter queues when the underlying service time
+nian resetting.                                                       variability (CV ) is large. Noteworthy in this case is the
+  To find the optimal resetting rate in Fig. 6, we solve              dominance of sharp resetting over Poissonian resetting as
+                                                                      predicted by Eq. (22). Moreover, for high CV values the
+                       S(hSi, α, r∗ ) = 0,                    (41)    mean queue length at optimal resetting drops below the
+where S(hSi, α, r∗ ) denotes the left hand side of Eq. (12),          mean queue length in the absence of service time fluc-
+after substituting the Laplace transform of Eq. (35). This            tuations (CV = 0). This hallmark property shows how
+gives r∗ ≃ 0.034. A similar minimization procedure can                resetting can take advantage of large stochastic fluctua-
+be carried out for sharp resetting. Substitution of the sur-          tions in service time and expedite the process completion.
+vival function for the Pareto distribution given in Eq. (31)
+into Eq. (20) yields the following equation for the optimal
+resetting time τ ∗                                                                         VII.   CONCLUSIONS AND OUTLOOK
+
+                      G(hSi, α, τ ∗ ) = τ ∗ ,                 (42)    Regulating the number of jobs in a queue is an integral
+where                                                                 part of performance modeling and optimization of queu-
+                              τ α                                   ing systems. One problem that arises in this context is
+                                      −ατ + α2 L + τ .
+                                                    
+           G(hSi, α, τ ) =                                    (43)    that large stochastic fluctuations in service times lead to
+                              L                                       significant backlogs and delays. In this paper, we showed
+Solving gives τ ∗ ≃ 1.990.                                            how this problem can be mitigated by service resetting.
+   The optimal resetting rate r∗ can be substituted into              Indeed, we have shown that when applied to servers with
+Eqs. (6) and (7), to obtain the mean and variance of the              intrinsically highly service time variability, resetting can
+service time under optimal Poissonian resetting. Simi-                dramatically reduce queue lengths and job waiting times.
+larly, τ ∗ can be substituted into Eqs. (15) and (16), for               Our analysis was based on the canonical M/G/1 queu-
+the mean and variance of the service time under optimal               ing model in which jobs arrive to the queue following
+                                                                                                                                                                    10
+
+                 10                                                                                     30                           a
+                                                                                                                                  ul
+
+                               (〈S〉,α,r)
+
+
+
+                                                                                  Mean number of jobs
+                                                       -5
+                  8                          2. × 10                                                    25                      rm
+                                                     0                                                                       fo
+                                            -2. × 10-5
+                                                                        CV≃1.20                                         PK
+                  6                                                                                     20
+
+    (〈S〉,α,τ)
+                                                                                                                             ●   ●          ●
+                                                      0.005 0.02
+                                                                                                                                                        ●       ●
+                                                                        CV≃1.33                                                            Poissonian
+                  4                                Resetting rate                                       15
+                                                                        CV≃1.51
+                  2                                                                                     10
+                                                                                                                             ●   ●          ●
+                                                                        CV≃1.76                                                                         ●       ●
+                  0   (a )                                                                               5   (b)                                Sharp
+                                                                        CV≃2.18
+                 -2                                                                                      0
+                       2.0   2.1              2.2           2.3   2.4                                               1                  2            3       4
+                             Resetting time                                                                    Squared coefficient of variation
+
+FIG. 7. Panel (a): Solutions of Eqs. (41) and (42) for the Pareto service time distribution under Poissonian (inset) and sharp
+resetting (main). The intersection points of the curves for different α (i.e., for different CV ) with the dashed horizontal line
+through the origin give the optimal restart time τ ∗ (optimal restart rate r∗ in the inset). Panel (b): The mean number of jobs
+in the queue as a function of the underlying CV 2 of the service time distribution. The Pollaczek-Khinchin formula gives the
+familiar linear dependence of Eq. (1). Also plotted are the behaviours for the optimal Poissonian and sharp resetting protocols,
+with colored circles matching their counterparts in panel (a). Strong deviations from the Pollaczek-Khinchin behaviour of the
+non-restarted case are observed. While resetting provides no advantage for low CV values, it can drastically reduce queue
+lengths when CV is high.
+
+
+a Poisson process and service times come from a gen-                          Poissonian. To this end, we recall Kingman’s approxima-
+eral distribution. The renowned Pollaczek-Khinchin for-                       tion formula [132], which asserts that the G/G/1 queue
+mula (Eq. 1) asserts that the mean number of jobs in                          suffers from the same linear dependence of the mean
+this queue grows linearly with the squared coefficient of                     number of jobs on the squared coefficient of variation
+variation, CV 2 , of the service time. Employing the re-                      of the service time. Thus, applying service resetting to
+cently developed framework of first-passage under restart                     this queue will qualitatively have the same effect as in the
+[68, 69] to the M/G/1 queue, we showed that Poissonian                        simpler M/G/1 queue. Moreover, as the arrival process is
+service resetting reduces both the mean and variance of                       decoupled from the service process, the results derived in
+the overall service time when CV > 1, i.e., exactly when                      Secs. III-V above can be applied directly to the G/G/1
+service time fluctuations start to become a major source                      queue, with the only difference being Kingman’s approx-
+of concern. Sharp service resetting, a.k.a deterministic or                   imation formula substituting for Pollaczek-Khinchin. In-
+periodic, performs even better and could in some cases                        deed, this can be done as both formulas only depend on
+lower the mean and variance of the service time even                          the first two moments of the service time distribution.
+when CV < 1. In both cases, the net result is much                            Conclusions coming from this work thus apply broadly
+shorter queues and examples were given to show that                           to single-server queuing systems, and their ramifications
+mean queue lengths can drop well below those attained                         on multi-server queues and queue networks remain to be
+for servers with no service time fluctuations (determin-                      worked out and understood in detail.
+istic service time, CV = 0). Service resetting can thus
+turn a well-known drawback of queueing systems into a
+favourable advantage.
+   Our work is the first step towards the application of re-
+setting as a fluctuations mitigation strategy in queueing
+systems. Some future research directions are discussed
+                                                                                                                   ACKNOWLEDGMENTS
+below. The analysis presented above yielded an analyti-
+cal result for the mean number of jobs in an M/G/1 queue
+under service resetting, thus generalizing the Pollaczek-
+                                                                                 Arnab Pal is indebted to Tel Aviv University (via the
+Khinchin formula to this case. In the future, it would
+                                                                              Raymond and Beverly Sackler postdoc fellowship and the
+be interesting to generalize this result beyond the mean,
+                                                                              fellowship from Center for the Physics and Chemistry
+so as to give the full distribution of the queue length un-
+                                                                              of Living Systems) where the project started. Shlomi
+der service resetting. Another interesting direction would
+                                                                              Reuveni acknowledges support from the Israel Science
+be to generalize the analysis to other queueing systems,
+                                                                              Foundation (grant No. 394/19). This project has re-
+e.g., the M/G/k queue which has k-servers or to other
+                                                                              ceived funding from the European Research Council
+multi-server systems.
+                                                                              (ERC) under the European Union’s Horizon 2020 re-
+   Going to queues with non-Markovian arrivals is also                        search and innovation programme (Grant agreement No.
+of interest, as realistic job arrival processes need not be                   947731).
+                                                                                                                       11
+
+       Appendix A: Service time under restart                    1.   Moments of service time under Poissonian
+                                                                                   resetting
+In this section, we briefly review a few essential results
+that were derived employing the framework of first pas-          Consider the case of Poissonian resetting. When the
+sage under restart in [69]. We start by recalling that        restart time R is Poissonian, its probability density func-
+the distribution of service time under restart in Laplace     tion is given by
+space reads [69]
+                                                                                     fR (t) = r e−rt ,             (A10)
+                        Pr(S < R)S̃min (s)                    and the cumulative distribution function is given by
+            S̃R (s) =                        ,  (A1)
+                      1 − Pr(R ≤ S)R̃min (s)
+                  R∞                                                              Pr(R ≤ t) = 1 − e−rt ,           (A11)
+where S̃R (s) = 0 dt e−st fSR (t). Moreover, we have
+defined two auxiliary random variables                        where r is the resetting rate.
+                                                                 In the case of Poissonian resetting, the cumulative dis-
+                   Rmin ≡ {R|R ≤ S} ,                         tribution function of min(S, R) can be written as followed
+                   Smin ≡ {S|S < R} .                 (A2)            Pr(min(S, R) ≤ t) = 1 − Pr(S > t) e−rt .     (A12)
+In words, Rmin is the restart time conditioned on the         Using the following formula for the expectation value of
+event that restart occurs before the service is over. Sim-    non-negative random variable
+ilarly, Smin is the time conditioned that service occurred                            Z ∞
+prior to a restart. The probability density functions of                        hXi =      dt qX (t),           (A13)
+Rmin and Smin are given by [69]                                                            0
+                      R∞                                      where qX (t) = Pr(X > t) is the survival function of X,
+                fR (t) t dt0 fS (t0 )   fR (t)Pr(S > t)
+   fRmin (t) =                        =                 ,     one can easily show that
+                     Pr(R ≤ S)            Pr(R ≤ S)                             Z ∞
+                                                       (A3)
+                      R∞ 0                                       hmin(S, R)i =       dt Pr(S > t)Pr(R > t)
+                                  0
+                fS (t) t dt fR (t )     fS (t)Pr(R > t)                         Z0 ∞
+    fSmin (t) =                       =                 .
+                     Pr(S < R)            Pr(S < R)                           =      dt Pr(S > t)e−rt
+                                                       (A4)                      0
+                                                                                Z ∞
+The moments can now easily be computed from Eq. (A1)                          =      dt [1 − Pr(S < t)] e−rt
+by noting that                                                                  Z0 ∞            Z ∞
+                                                                              =      dt e−rt −       dt Pr(S < t)e−rt
+                n             dn                                                 0                0
+              hSR i = (−1)n       S̃R (s)|s→0 ,       (A5)                           Z ∞           Z t
+                              dsn
+                                                                                                                     
+                                                                                1              −rt
+                                                                              = −         dt e          dt0 fS (t0 )
+which gives [69]                                                                r     0              0
+                                                                                  1 S̃(r)   1 − S̃(r)
+        hmin(S, R)i                                                           =     −     =           ,            (A14)
+hSR i =                                        (A6)                               r   r        r
+         Pr(S < R)
+                                                              where in the second to last step we used a known for-
+  2     hmin(S, R)2 i 2Pr(R ≤ S)hRmin ihmin(S, R)i            mula for the Laplace  transform  of a time-domain integra-
+hSR i=               +                             ,
+                              Pr(S < R)2
+                                                                           R           
+         Pr(S < R)                                                  R∞
+                                                              tion: 0 dt
+                                                                              t
+                                                                                dτ g(τ ) e −rt
+                                                                                               = g̃(r)
+                                                                              0                     r , where g̃(r) is the
+                                               (A7)
+                                                              Laplace transform of g(t). Similarly, we can use Eq. (A9)
+where hRmin i can be computed directly from Eq. (A4).         to find
+                                                                                     Z ∞
+The other components can also be systematically derived
+with the knowledge of individual time densities. For ex-               Pr(S < R) =         dt r e−rt Pr(S < t)
+                                                                                      0
+ample, the numerator hmin(S, R)i in Eq. (A6) is given                                 Z ∞
+by                                                                                =r        dt e−rt Pr(S < t)
+                                                                                          0
+     Pr(min(S, R) ≤ t) = 1 − Pr(S > t)Pr(R > t). (A8)                                = S̃(r),                      (A15)
+and the denominator in Eq. (A6) is given by                     Substituting Eqs.(A14) and (A15) into Eq.(A6), we get
+                   Z ∞                                        the following formula for the mean service time under
+       Pr(S < R) =      dt fR (t)Pr(S < t)                    Poissonian resetting
+                     0
+                   Z ∞            Z t
+                                                                                               1 − S̃(r)
+                 =      dt fR (t)     dt0 fS (t0 ).   (A9)                          hSr i =              ,         (A16)
+                       0               0                                                         rS̃(r)
+                                                                                                                                         12
+
+which was used in the main text (see Eq. (6)). This                             in hand, we can now calculate hSr2 i
+equation was previously derived in [69].
+  We now turn to the derivation of formula for the second                                   hmin(S, R)2 i 2Pr(R ≤ S)hRmin ihmin(S, R)i
+                                                                                 hSr2 i =                +
+moment of the service time under Poissonian resetting,                                       Pr(S < R)            Pr(S < R)2
+hSr2 i. To do so, we start by deriving hmin(S, R)2 i. By                                    2r dS̃(r)
+                                                                                                 dr − 2S̃(r) + 2
+taking the derivative of Eq. (A12), one can easily obtain                             =
+the probability density function of min(S, R)                                                   r2 S̃(r)
+                                                                                                        dS̃(r)
+                                                                                                          r dr −S̃(r)+1 1−S̃(r)
+                                                                                          2 1 − S̃(r)
+      fmin(S,R) (t) = fS (t) e−rt + r Pr(S > t) e−rt .(A17)                             +
+                                                                                                             r (1−S̃(r))  r
+
+                                                                                                           S̃(r) 2
+
+Now, we can use the probability density function given                                    
+                                                                                            dS̃(r)
+                                                                                                                 
+in Eq.(A17) to calculate hmin(S, R)2 i                                                  2 r dr − S̃(r) + 1
+                                                                                      =                            ,                  (A20)
+                     Z ∞                                                                        r2 S̃(r)2
+hmin(S, R)2 i =               dt t2 fS (t) e−rt + r Pr(S > t) e−rt
+                                                                            
+                                                                                which was used in the main text (see Eq. (7)).
+                     Z0 ∞
+                 =            dt t2 fS (t) e−rt
+                      0
+                      Z ∞                                                       2.   Moments of service time under sharp resetting
+                 +r               dt t2 Pr(S > t) e−rt
+                          0                                                        Consider now the case of deterministic resetting.
+                   d2 S̃(r)
+                                          Z ∞                                   When the restart time R is deterministic, its probabil-
+                 =          +r                  dt t2 (1 − Pr(S < t)) e−rt      ity density function is given by
+                     dr2                  0
+                                                Z ∞
+                     d2 S̃(r)   2                                                                      fR (t) = δ(t − τ ),            (A21)
+                 =        2
+                              + 2 −r                  dt t2 Pr(S < t)e−rt
+                       dr      r                  0
+                                                                              where τ is the resetting time and δ(t) is the delta func-
+                                                      S̃(r)
+                      2
+                     d S̃(r)   2                d2      r
+                                                                                tion. In the case of sharp resetting, the cumulative distri-
+                 =       2
+                             + 2 −r                                             bution function of min(S, R) can be written as followed
+                      dr      r                      dr2
+                   2r dS̃(r)
+                        dr − 2S̃(r) + 2
+                                                                                       Pr(min(S, τ ) ≤ t) = 1 − Pr(S > t)θ(τ − t), (A22)
+                 =                      ,                          (A18)
+                             r2                                                                                      R∞
+                                                                                where we have used Pr(R > t) = t dt0 δ(t0 − τ ) =
+                                                                                θ(τ − t), where θ is the Heaviside step function. Using
+where during the derivation
+                         R ∞ we used a known propertyn                          Eq. (A13) once again one can easily show that
+of Laplace transforms: 0 dt tn g(t)e−rt = (−1)n d drg̃(r)
+                                                       n ,
+
+where n is a positive integer with g̃(r) being the Laplace                                      Z ∞                        Z τ
+transform of g(t).                                                               hmin(S, τ )i =     dt Pr(S > t)θ(τ − t) =     dt qS (t),
+                                                                                                   0                              0
+   We now turn to calculate hRmin i. This can be explic-                                                                              (A23)
+itly done using Eq.(A4)
+                                                                                                   Rτ
+            Z ∞                                                                 where qS (τ ) = 1 − 0 dt fS (t) is the survival function
+hRmin i =     dt tfRmin (t)                                                     associated with the underlying service time. To derive
+             0                                                                  Pr(S < R) we once again use Eq. (A9) to find
+                     Z ∞
+              1                                                                                      Z ∞
+        =                  dt t re−rt Pr(S > t)
+          Pr(R ≤ S) 0                                                                   Pr(S < R) =       dt δ(t − τ )Pr(S < t)
+                          Z ∞                                                                         0
+                r                                                                                    Z ∞
+        =                      dt t e−rt (1 − Pr(S < t))
+          1 − Pr(S < R) 0                                                                          =      dt δ(t − τ )(1 − qS (t))
+            R∞               R∞                                                                            0
+          r 0 dt t e−rt − 0 dt t e−rt Pr(S < t)
+                                                   
+        =                                                                                              = 1 − qS (τ ).                 (A24)
+                           1 − S̃(r)
+                        !
+                                  S̃(r)
+                                                                                  Substituting Eqs.(A23) and (A24) into Eq.(A6), we get
+                              d
+            r     1                 r                                           the following formula for the mean service time under
+                  r2 +            dr
+                                                                                sharp restart
+        =
+                     1 − S̃(r)                                                                           Rτ
+                                                                                                            dt qS (t)
+            r dS̃(r) − S̃(r) + 1                                                                  hSτ i = 0           ,          (A25)
+        =       dr
+                                         .                       (A19)                                  1 − qS (τ )
+                 r 1 − S̃(r)
+                                                                                which was used in the main text (see Eq. (15)). This
+                                                                                equation was previously derived in [108, 111]. A discrete
+  Having all the terms on the right hand side of Eq. (A7)                       analog for Eq. (A25) was derived in [113].
+                                                                                                                                     13
+
+  We now turn to the derivation of formula for the second             using Eq.(A4)
+moment of the service time under sharp restart, hSτ2 i.                                 Z ∞
+To do so, we start by deriving hmin(S, τ )2 i. By taking
+the derivative of Eq. (A22), one can easily obtain the                      hRmin i =       dt tfRmin (t)
+                                                                                        0
+probability density function of min(S, τ )                                                  1
+                                                                                                   Z ∞
+                                                                                    =                   dt tδ(t − τ )Pr(S > t)
+                       ∂qS (t)                                                        Pr(τ ≤ S) 0
+  fmin(S,τ ) (t) = −           θ(τ − t) + qS (t)δ(τ − t). (A26)                       τ qS (τ )
+                         ∂t                                                         =           = τ.                         (A28)
+                                                                                       qS (τ )
+Now, we can use Eq.(A26) to compute hmin(S, τ )2 i which
+reads                                                                     Substituting Eqs. (A23), (A24), (A27) and (A28) into
+                 Z ∞                                                  Eq. (A7) we arrive at the following expression
+                                   ∂q S (t)
+hmin(S, τ )2 i =        dt t2 −             θ(τ − t) + qS (t)δ(τ − t)
+                   0                 ∂t
+                                                                                  hmin(S, τ )2 i 2Pr(τ ≤ S)hRmin ihmin(S, τ )i
+                                                                         hSτ2 i =
+                               Z τ
+                   2                      2 ∂qS (t)                                             +
+               = τ qS (τ ) −        dt t                                           Pr(S < τ )                Pr(S < τ )2
+                                 0            ∂t                                   Rτ                         Rτ
+                                               Z τ                                2 0 dt tqS (t) 2τ qS (τ ) 0 dt qS (t)
+                                                                                =                +
+               = τ 2 qS (τ ) − τ 2 qS (τ ) + 2      dt t qS (t)                     1 − qS (τ )         (1 − qS (τ ))2
+                                                 0                                              Rτ                        Rτ
+                   Z τ                                                            2(1 − qS (τ )) 0 dt tqS (t) + 2τ qS (τ ) 0 dt qS (t)
+               =2        dt t qS (t).                          (A27)            =                                                      ,
+                                                                                                    (1 − q (τ ))2
+                                                                                                          S
+                       0
+                                                                                                                                 (A29)
+We now turn to calculate hRmin i. Since R is determinis-
+tic, hRmin i is simply τ . This can also be explicitly shown          which was used in the main text (see Eq. (16)).
+
+
+
+
+  [1] Cohen, J.W., 2012. The single server queue. Elsevier.                 queueing theory: the mathematics of computer perfor-
+  [2] Newell, C., 2013. Applications of queueing theory (Vol.               mance modeling. Springer Science & Business Media.
+      4). Springer Science & Business Media.                           [14] Harchol-Balter, M., 2013. Performance modeling and
+  [3] Adan, Ivo, and Jacques Resing. Queueing theory.                       design of computer systems: queueing theory in action.
+      (2002): 104-106. Eindhoven University of Technology.                  Cambridge University Press.
+      Department of Mathematics and Computing Science.                 [15] Lakatos, L., Szeidl, L. and Telek, M., 2013. Introduc-
+  [4] Haviv, M., 2013. Queues. New York: Springer.                          tion to queueing systems with telecommunication ap-
+  [5] Gans, N., Koole, G. and Mandelbaum, A., 2003. Tele-                   plications (Vol. 388). New York: Springer.
+      phone call centers: Tutorial, review, and research               [16] Jackson, R.R.P., 1954. Queueing systems with phase
+      prospects. Manufacturing & Service Operations Man-                    type service. Journal of the Operational Research Soci-
+      agement, 5(2), pp.79-141.                                             ety, 5(4), pp.109-120.
+  [6] Koole, G. and Mandelbaum, A., 2002. Queueing models              [17] Jackson, R.R.P., 1956. Random Queueing Processes
+      of call centers: An introduction. Annals of Operations                with Phase-Type Service. Journal of the Royal Statis-
+      Research, 113(1), pp.41-59.                                           tical Society: Series B (Methodological), 18(1), pp.129-
+  [7] Bachmat, E., Berend, D., Sapir, L., Skiena, S. and Stol-              132.
+      yarov, N., 2009. Analysis of airplane boarding times.            [18] Askin, R.G., and Standridge, C.R. 1993. Modeling and
+      Operations Research, 57(2), pp.499-513.                               analysis of manufacturing systems. John Wiley & Sons
+  [8] Bachmat, E., 2019. Airplane boarding meets express                    Incorporated.
+      line queues. European Journal of Operational Research,           [19] Curry, G.L. and Feldman, R.M., 2010. Manufactur-
+      275(3), pp.1165-1177.                                                 ing systems modeling and analysis. Springer Science &
+  [9] Erland, S., Kaupužs, J., Frette, V., Pugatch, R. and                 Business Media.
+      Bachmat, E., 2019. Lorentzian-geometry-based analysis            [20] Guang, W., 1998. Application of queueing theory with
+      of airplane boarding policies highlights “slow passengers             Monte Carlo simulation to the study of the intake
+      first” as better. Physical Review E, 100(6), p.062313.                and adverse effects of ethanol. Alcohol and alcoholism,
+ [10] Cooper, R.B., 1981, January. Queueing theory. In Pro-                 33(5), pp.519-527.
+      ceedings of the ACM’81 conference (pp. 119-122).                 [21] CAVAS, K.L. and ÇAVAŞ, L., 2007. An application of
+ [11] Daigle, J.N., 2005. Queueing theory with applications to              queueing theory to the relationship between insulin level
+      packet telecommunication. Springer Science & Business                 and number of insulin receptors. Türk Biyokimya Der-
+      Media.                                                                gisi, 32(1), pp.32-38.
+ [12] Bolch, G., Greiner, S., De Meer, H. and Trivedi, K.S.,           [22] Mather, W.H., Cookson, N.A., Hasty, J., Tsimring, L.S.
+      2006. Queueing networks and Markov chains: model-                     and Williams, R.J., 2010. Correlation resonance gener-
+      ing and performance evaluation with computer science                  ated by coupled enzymatic processing. Biophysical jour-
+      applications. John Wiley & Sons.                                      nal, 99(10), pp.3172-3181.
+ [13] Nelson, R., 2013. Probability, stochastic processes, and         [23] Cookson, N.A., Mather, W.H., Danino, T., Mondragón-
+                                                                                                                                14
+
+     Palomino, O., Williams, R.J., Tsimring, L.S. and Hasty,           96(21), p.218702.
+     J., 2011. Queueing up for enzymatic processing: corre-       [41] Romano, M.C., Thiel, M., Stansfield, I. and Grebogi,
+     lated signaling through coupled degradation. Molecular            C., 2009. Queueing phase transition: theory of transla-
+     systems biology, 7(1), p.561.                                     tion. Physical review letters, 102(19), p.198104.
+[24] Mather, W.H., Hasty, J., Tsimring, L.S. and Williams,        [42] Merhav, N. and Kafri, Y., 2010. Bose–Einstein conden-
+     R.J., 2011. Factorized time-dependent distributions for           sation in large deviations with applications to informa-
+     certain multiclass queueing networks and an application           tion systems. Journal of Statistical Mechanics: Theory
+     to enzymatic processing networks. Queueing systems,               and Experiment, 2010(02), p.P02011.
+     69(3), pp.313-328.                                           [43] Chernyak, V.Y., Chertkov, M., Goldberg, D.A. and
+[25] Evstigneev, V.P., Holyavka, M.G., Khrapatiy, S.V.                 Turitsyn, K., 2010. Non-equilibrium statistical physics
+     and Evstigneev, M.P., 2014. Theoretical description of            of currents in queuing networks. Journal of Statistical
+     metabolism using queueing theory. Bulletin of mathe-              Physics, 140(5), pp.819-845.
+     matical biology, 76(9), pp.2238-2248.                        [44] Reuveni, S., Eliazar, I. and Yechiali, U., 2011. Asym-
+[26] Clement, E.J., Schulze, T.T., Soliman, G.A., Wysocki,             metric inclusion process. Physical Review E, 84(4),
+     B.J., Davis, P.H. and Wysocki, T.A., 2020. Stochas-               p.041101.
+     tic simulation of cellular metabolism. IEEE Access, 8,       [45] Reuveni, S., Eliazar, I. and Yechiali, U., 2012. Asym-
+     pp.79734-79744.                                                   metric inclusion process as a showcase of complexity.
+[27] Kloska, S., Palczyński, K., Marciniak, T., Talaśka, T.,         Physical review letters, 109(2), p.020603.
+     Nitz, M., Wysocki, B.J., Davis, P. and Wysocki, T.A.,        [46] Bonomo, O.L. and Reuveni, S., 2019. Occupancy cor-
+     2021. Queueing theory model of Krebs cycle. Bioinfor-             relations in the asymmetric simple inclusion process.
+     matics.                                                           Physical Review E, 100(4), p.042109.
+[28] Arazi, A., Ben-Jacob, E. and Yechiali, U., 2004. Bridg-      [47] English, B.P., Min, W., Van Oijen, A.M., Lee, K.T.,
+     ing genetic networks and queueing theory. Physica A:              Luo, G., Sun, H., Cherayil, B.J., Kou, S.C. and Xie,
+     Statistical Mechanics and its Applications, 332, pp.585-          X.S., 2006. Ever-fluctuating single enzyme molecules:
+     616.                                                              Michaelis-Menten equation revisited. Nature chemical
+[29] Gelenbe, E., 2007. Steady-state solution of probabilis-           biology, 2(2), pp.87-94.
+     tic gene regulatory networks. Physical Review E, 76(3),      [48] Kou, S.C., Cherayil, B.J., Min, W., English, B.P.
+     p.031903.                                                         and Xie, X.S., 2005. Single-Molecule Michaelis- Menten
+[30] Elgart, V., Jia, T. and Kulkarni, R.V., 2010. Applica-            Equations. The Journal of Physical Chemistry B,
+     tions of Little’s law to stochastic models of gene expres-        41(109), pp.19068-19081.
+     sion. Physical Review E, 82(2), p.021901.                    [49] Moffitt, J.R. and Bustamante, C., 2014. Extract-
+[31] Jia, T. and Kulkarni, R.V., 2011. Intrinsic noise in              ing signal from noise: kinetic mechanisms from a
+     stochastic models of gene expression with molecular               Michaelis–Menten-like expression for enzymatic fluctu-
+     memory and bursting. Physical review letters, 106(5),             ations. The FEBS journal, 281(2), pp.498-517.
+     p.058102.                                                    [50] Moffitt, J.R., Chemla, Y.R. and Bustamante, C., 2010.
+[32] Kumar, N., Singh, A. and Kulkarni, R.V., 2015. Tran-              Methods in statistical kinetics. Methods in enzymology,
+     scriptional bursting in gene expression: analytical re-           475, pp.221-257.
+     sults for general stochastic models. PLoS computational      [51] Flomenbom, O., Velonia, K., Loos, D., Masuo, S., Cot-
+     biology, 11(10), p.e1004292.                                      let, M., Engelborghs, Y., Hofkens, J., Rowan, A.E.,
+[33] Jun, S., Si, F., Pugatch, R. and Scott, M., 2018. Fun-            Nolte, R.J., Van der Auweraer, M. and de Schryver,
+     damental principles in bacterial physiology—history, re-          F.C., 2005. Stretched exponential decay and correla-
+     cent progress, and the future with focus on cell size con-        tions in the catalytic activity of fluctuating single lipase
+     trol: a review. Reports on Progress in Physics, 81(5),            molecules. Proceedings of the National Academy of Sci-
+     p.056601.                                                         ences, 102(7), pp.2368-2372.
+[34] Dean, J., 2019. A Queueing Theoretic Model of a Gene         [52] Velonia, K., Flomenbom, O., Loos, D., Masuo, S., Cot-
+     Regulatory Network (Doctoral dissertation, University             let, M., Engelborghs, Y., Hofkens, J., Rowan, A.E.,
+     of Bristol).                                                      Klafter, J., Nolte, R.J. and de Schryver, F.C., 2005.
+[35] Derrida, B., 1998. An exactly soluble non-equilibrium             Single-enzyme kinetics of CALB-catalyzed hydrolysis.
+     system: the asymmetric simple exclusion process.                  Angewandte Chemie, 117(4), pp.566-570.
+     Physics Reports, 301(1-3), pp.65-83.                         [53] Whitt, W., 2000. The impact of a heavy-tailed service-
+[36] Helbing, D., 2001. Traffic and related self-driven many-          time distribution upon the M/GI/s waiting-time distri-
+     particle systems. Reviews of modern physics, 73(4),               bution. Queueing Systems, 36(1), pp.71-87.
+     p.1067.                                                      [54] Schrage, L.E. and Miller, L.W., 1966. The queue M/G/1
+[37] Evans, M.R. and Hanney, T., 2005. Nonequilibrium sta-             with the shortest remaining processing time discipline.
+     tistical mechanics of the zero-range process and related          Operations Research, 14(4), pp.670-684.
+     models. Journal of Physics A: Mathematical and Gen-          [55] Harchol-Balter, M., Schroeder, B., Bansal, N. and
+     eral, 38(19), p.R195.                                             Agrawal, M., 2003. Size-based scheduling to improve
+[38] Averin, D.V., 2005. Electrons held in a queue. Nature,            web performance. ACM Transactions on Computer Sys-
+     434(7031), pp.285-287.                                            tems (TOCS), 21(2), pp.207-233.
+[39] Bylander, J., Duty, T. and Delsing, P., 2005. Current        [56] Schroeder, B. and Harchol-Balter, M., 2006. Web
+     measurement by real-time counting of single electrons.            servers under overload: How scheduling can help. ACM
+     Nature, 434(7031), pp.361-364.                                    Transactions on Internet Technology (TOIT), 6(1),
+[40] Duch, J. and Arenas, A., 2006. Scaling of fluctuations            pp.20-52.
+     in traffic on complex networks. Physical Review Letters,     [57] Schrage, L., 1968. Letter to the editor—a proof of the
+                                                                                                                                15
+
+     optimality of the shortest remaining processing time dis-       [77] Tal-Friedman, O., Pal, A., Sekhon, A., Reuveni, S. and
+     cipline. Operations Research, 16(3), pp.687-690.                     Roichman, Y., 2020. Experimental realization of dif-
+[58] Spall, J.C., 2005. Introduction to stochastic search and             fusion with stochastic resetting. J. Phys. Chem. Lett.
+     optimization: estimation, simulation, and control (Vol.              2020, 11, 17, 7350–7355.
+     65). John Wiley & Sons.                                         [78] Besga, B., Bovon, A., Petrosyan, A., Majumdar, S.
+[59] Harchol-Balter, M., 2000, April. Task assignment with                and Ciliberto, S., 2020. Optimal mean first-passage time
+     unknown duration. In Proceedings 20th IEEE Interna-                  for a Brownian searcher subjected to resetting: exper-
+     tional Conference on Distributed Computing Systems                   imental and theoretical results. Phys. Rev. Research 2,
+     (pp. 214-224). IEEE.                                                 032029(R) (2020).
+[60] Luby, M., Sinclair, A. and Zuckerman, D., 1993. Opti-           [79] Faisant, F., Besga, B., Petrosyan, A., Ciliberto, S. and
+     mal speedup of Las Vegas algorithms. Information Pro-                Majumdar, S.N., 2021. Optimal mean first-passage time
+     cessing Letters, 47(4), pp.173-180.                                  of a Brownian searcher with resetting in one and two
+[61] Gomes, C.P., Selman, B. and Kautz, H., 1998.                         dimensions: Experiments, theory and numerical tests.
+     Boosting combinatorial search through randomization.                 arXiv preprint arXiv:2106.09113.
+     AAAI/IAAI, 98, pp.431-437.                                      [80] Evans, M.R., Majumdar, S.N. and Schehr, G., 2020.
+[62] Montanari, A. and Zecchina, R., 2002. Optimizing                     Stochastic resetting and applications. Journal of Physics
+     searches via rare events. Physical review letters, 88(17),           A: Mathematical and Theoretical, 53(19), p.193001.
+     p.178701.                                                       [81] Reuveni, S., Urbakh, M. and Klafter, J., 2014. Role
+[63] Steiger, D.S., Rønnow, T.F. and Troyer, M., 2015.                    of substrate unbinding in Michaelis–Menten enzymatic
+     Heavy tails in the distribution of time to solution for              reactions. Proceedings of the National Academy of Sci-
+     classical and quantum annealing. Physical review let-                ences, 111(12), pp.4391-4396.
+     ters, 115(23), p.230501.                                        [82] Rotbart, T., Reuveni, S. and Urbakh, M., 2015.
+[64] Evans, M.R. and Majumdar, S.N., 2011. Diffusion with                 Michaelis-Menten reaction scheme as a unified approach
+     stochastic resetting. Physical review letters, 106(16),              towards the optimal restart problem. Physical Review
+     p.160601.                                                            E, 92(6), p.060101.
+[65] Evans, M.R. and Majumdar, S.N., 2011. Diffusion with            [83] Robin, T., Reuveni, S. and Urbakh, M., 2018. Single-
+     optimal resetting. Journal of Physics A: Mathematical                molecule theory of enzymatic inhibition. Nature com-
+     and Theoretical, 44(43), p.435001.                                   munications, 9(1), pp.1-9.
+[66] Kusmierz, L., Majumdar, S.N., Sabhapandit, S. and               [84] Bressloff, P.C., 2020. Queueing theory of search pro-
+     Schehr, G., 2014. First order transition for the opti-               cesses with stochastic resetting. Physical Review E,
+     mal search time of Lévy flights with resetting. Physical            102(3), p.032109.
+     review letters, 113(22), p.220602.                              [85] Di Crescenzo, A., Giorno, V., Nobile, A.G. and Riccia-
+[67] Kuśmierz, L. and Gudowska-Nowak, E., 2015. Optimal                  rdi, L.M., 2003. On the M/M/1 queue with catastrophes
+     first-arrival times in Lévy flights with resetting. Physical        and its continuous approximation. Queueing Systems,
+     Review E, 92(5), p.052127.                                           43(4), pp.329-347.
+[68] Reuveni, S., 2016. Optimal stochastic restart renders           [86] Di Crescenzo, A., Giorno, V., Kumar, B.K. and No-
+     fluctuations in first passage times universal. Physical              bile, A.G., 2012. A double-ended queue with catastro-
+     review letters, 116(17), p.170601.                                   phes and repairs, and a jump-diffusion approximation.
+[69] Pal, A. and Reuveni, S., 2017. First Passage under                   Methodology and Computing in Applied Probability,
+     Restart. Physical review letters, 118(3), p.030603.                  14(4), pp.937-954.
+[70] Chechkin, A. and Sokolov, I.M., 2018. Random search             [87] Kumar, B.K. and Arivudainambi, D., 2000. Transient
+     with resetting: a unified renewal approach. Physical re-             solution of an M/M/1 queue with catastrophes. Com-
+     view letters, 121(5), p.050601.                                      puters & Mathematics with applications, 40(10-11),
+[71] Pal, A. and Prasad, V.V., 2019. First passage under                  pp.1233-1240.
+     stochastic resetting in an interval. Physical Review E,         [88] Boudali, O. and Economou, A., 2012. Optimal and equi-
+     99(3), p.032123.                                                     librium balking strategies in the single server Markovian
+[72] Pal, A. and Prasad, V.V., 2019. Landau-like expansion                queue with catastrophes. European Journal of Opera-
+     for phase transitions in stochastic resetting. Physical              tional Research, 218(3), pp.708-715.
+     Review Research, 1(3), p.032001.                                [89] Kumar, B.K., Krishnamoorthy, A., Madheswari, S.P.
+[73] Ray, S., Mondal, D. and Reuveni, S., 2019. Peclet num-               and Basha, S.S., 2007. Transient analysis of a single
+     ber governs transition to acceleratory restart in drift-             server queue with catastrophes, failures and repairs.
+     diffusion. Journal of Physics A: Mathematical and The-               Queueing systems, 56(3-4), pp.133-141.
+     oretical, 52(25), p.255002.                                     [90] Chen, A., Pollett, P., Li, J. and Zhang, H., 2010. Marko-
+[74] Pal, A., Eliazar, I. and Reuveni, S., 2019. First passage            vian bulk-arrival and bulk-service queues with state-
+     under restart with branching. Physical review letters,               dependent control. Queueing Systems, 64(3), pp.267-
+     122(2), p.020602.                                                    304.
+[75] Ahmad, S., Nayak, I., Bansal, A., Nandi, A. and Das,            [91] Zeifman, A. and Korotysheva, A., 2012. Perturba-
+     D., 2019. First passage of a particle in a potential under           tion bounds for M t/M t/N queue with catastrophes.
+     stochastic resetting: A vanishing transition of optimal              Stochastic models, 28(1), pp.49-62.
+     resetting rate. Physical Review E, 99(2), p.022130.             [92] Di Crescenzo, A., Giorno, V., Nobile, A.G. and Riccia-
+[76] Ahmad, S. and Das, D., 2020. Role of dimensions in                   rdi, L.M., 2008. A note on birth–death processes with
+     first passage of a diffusing particle under stochastic re-           catastrophes. Statistics & probability letters, 78(14),
+     setting and attractive bias. Physical Review E, 102(3),              pp.2248-2257.
+     p.032145.                                                       [93] Chen, A. and Renshaw, E., 1997. The M/M/1 queue
+                                                                                                                               16
+
+      with mass exodus and mass arrivals when empty. Jour-        [113] Bonomo, O.L. and Pal, A., 2021. First passage under
+      nal of Applied Probability, pp.192-207.                           restart for discrete space and time: Application to one-
+ [94] Economou, A. and Fakinos, D., 2008. Alternative ap-               dimensional confined lattice random walks. Physical Re-
+      proaches for the transient analysis of Markov chains              view E, 103(5), p.052129.
+      with catastrophes. Journal of Statistical Theory and        [114] Aitchison, J. and Brown, J.A., 1957. The lognormal dis-
+      Practice, 2(2), pp.183-197.                                       tribution with special reference to its uses in economics.
+ [95] Gani, J. and Swift, R.J., 2007. Death and birth-death       [115] Crow, E.L. and Shimizu, K., 1987. Lognormal distribu-
+      and immigration processes with catastrophes. Journal              tions. New York: Marcel Dekker.
+      of Statistical Theory and Practice, 1(1), pp.39-48.         [116] Limpert, E., Stahel, W.A. and Abbt, M., 2001. Log-
+ [96] Kyriakidis, E.G., 2004. Transient solution for a simple           normal distributions across the sciences. BioScience,
+      immigration birth–death catastrophe process. Probabil-            51(5), pp.341-352.
+      ity in the Engineering and Informational Sciences, 18(2),   [117] V. Pareto, Cours d’économie politique (Droz, Geneva,
+      pp.233-236.                                                       1896); V. Pareto, Manual of political economy (reprint
+ [97] Kumar, B.K., Madheswari, S.P. and Venkatakrishnan,                edition, Oxford University Press, Oxford, 2014).
+      K.S., 2007. Transient solution of an M/M/2 queue with       [118] Newman, M.E., 2005. Power laws, Pareto distributions
+      heterogeneous servers subject to catastrophes. Interna-           and Zipf’s law. Contemporary physics, 46(5), pp.323-
+      tional journal of information and management sciences,            351.
+      18(1), p.63.                                                [119] Barabasi, A.L., 2005. The origin of bursts and heavy
+ [98] van Doorn, E.A., Zeifman, A.I. and Panfilova, T.L.,               tails in human dynamics. Nature, 435(7039), pp.207-
+      2010. Bounds and asymptotics for the rate of conver-              211.
+      gence of birth-death processes. Theory of Probability &     [120] B.C. Arnold, Pareto distributions (CRC Press, Boca
+      Its Applications, 54(1), pp.97-113.                               Raton, 2015).
+ [99] Chao, X., 1995. A queueing network model with catas-        [121] Eliazar, I., 2020. Power Laws. Springer International
+      trophes and product form solution. Operations Research            Publishing.
+      Letters, 18(2), pp.75-79.                                   [122] Brown, L., Gans, N., Mandelbaum, A., Sakov, A., Shen,
+[100] Kendall, D.G., 1953. Stochastic processes occurring in            H., Zeltyn, S. and Zhao, L., 2005. Statistical analy-
+      the theory of queues and their analysis by the method             sis of a telephone call center: A queueing-science per-
+      of the imbedded Markov chain. The Annals of Mathe-                spective. Journal of the American statistical association,
+      matical Statistics, pp.338-354.                                   100(469), pp.36-50.
+[101] Pal, A., 2015. Diffusion in a potential landscape with      [123] Gualandi, S. and Toscani, G., 2018. Call center ser-
+      stochastic resetting.                                             vice times are lognormal: A Fokker–Planck description.
+[102] R.W. Conway, W.L. Maxwell, and L.W. Miller. Theory                Mathematical Models and Methods in Applied Sciences,
+      of Scheduling. Addison-Wesley, 1967.                              28(08), pp.1513-1527.
+[103] Michaelis, L. and Menten, M.L., 1913. Die kinetik der       [124] Harchol-Balter, M. and Downey, A.B., 1997. Exploiting
+      invertinwirkung. Biochem. z, 49(333-369), p.352.                  process lifetime distributions for dynamic load balanc-
+[104] Stojkoski, V., Sandev, T., Kocarev, L. and Pal, A.,               ing. ACM Transactions on Computer Systems (TOCS),
+      2021. Geometric Brownian Motion under Stochastic Re-              15(3), pp.253-285.
+      setting: A Stationary yet Non-ergodic Process. Physical     [125] Crovella, M.E. and Bestavros, A., 1996, May. Self-
+      Review E, 104 (1), p.014121.                                      similarity in World Wide Web traffic: Evidence and
+[105] Majumdar, S.N., Pal, A. and Schehr, G., 2020. Extreme             possible causes. In Proceedings of the 1996 ACM SIG-
+      value statistics of correlated random variables: a peda-          METRICS international conference on Measurement
+      gogical review. Physics Reports, 840, pp.1-32.                    and modeling of computer systems (pp. 160-169).
+[106] Singh, P. and Pal, A., 2021. Extremal statistics for        [126] Barford, P. and Crovella, M., 1998, June. Generating
+      stochastic resetting systems. Physical Review E, 103(5),          representative web workloads for network and server
+      p.052119.                                                         performance evaluation. In Proceedings of the 1998
+[107] Pal, A., Kostinski, S. and Reuveni, S., 2021. The in-             ACM SIGMETRICS joint international conference on
+      spection paradox in stochastic resetting. arXiv preprint          Measurement and modeling of computer systems (pp.
+      arXiv:2108.07018.                                                 151-160).
+[108] Eliazar, I. and Reuveni, S., 2020. Mean-performance of      [127] Crovella, M.E., Taqqu, M.S. and Bestavros, A., 1998.
+      sharp restart I: Statistical roadmap. Journal of Physics          Heavy-tailed probability distributions in the World
+      A: Mathematical and Theoretical, 53(40), p.405004.                Wide Web. A practical guide to heavy tails, 1, pp.3-26.
+[109] Eliazar, I. and Reuveni, S., 2021. Mean-performance         [128] Shaikh, A., Rexford, J. and Shin, K.G., 1999. Load-
+      of Sharp Restart II: Inequality Roadmap. Journal of               sensitive routing of long-lived IP flows. ACM SIG-
+      Physics A: Mathematical and Theoretical, 54, 355001.              COMM Computer Communication Review, 29(4),
+[110] Eliazar, I. and Reuveni, S., 2021. Tail-behavior roadmap          pp.215-226.
+      for sharp restart. Journal of Physics A: Mathematical       [129] Harris, C.M., 1968. The Pareto distribution as a queue
+      and Theoretical, 54(12), p.125001.                                service discipline. Operations Research, 16(2), pp.307-
+[111] Pal, A., Kundu, A. and Evans, M.R., 2016. Diffusion               313.
+      under time-dependent resetting. Journal of Physics A:       [130] Gross, D., Shortle, J.F., Fischer, M.J. and Masi,
+      Mathematical and Theoretical, 49(22), p.225001.                   D.M.B., 2002, December. Difficulties in simulating
+[112] Bhat, U., De Bacco, C. and Redner, S., 2016. Stochastic           queues with Pareto service. In Proceedings of the Win-
+      search with Poisson and deterministic resetting. Jour-            ter Simulation Conference (Vol. 1, pp. 407-415). IEEE.
+      nal of Statistical Mechanics: Theory and Experiment,        [131] Ramsay, C.M., 2007. Exact waiting time and queue size
+      2016(8), p.083401.                                                distributions for equilibrium M/G/1 queues with Pareto
+                                                                                                                17
+
+      service. Queueing Systems, 57(4), pp.147-155.            the Cambridge Philosophical Society (Vol. 57, No. 4,
+[132] Kingman, J.F.C., 1961, October. The single server        pp. 902-904). Cambridge University Press.
+      queue in heavy traffic. In Mathematical Proceedings of
+

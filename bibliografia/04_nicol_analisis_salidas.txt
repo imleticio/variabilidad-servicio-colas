@@ -1,0 +1,891 @@
+Chapter 11
+Output Analysis for a Single
+Model
+
+     Banks, Carson, Nelson & Nicol
+  Discrete-Event System Simulation
+Purpose
+ Objective: Estimate system performance via simulation
+ If θ is the system performance, the precision of the
+  estimator!ˆ can be measured by:
+     The standard error of !ˆ .
+     The width of a confidence interval (CI) for θ.
+   Purpose of statistical analysis:
+     To estimate the standard error or CI .
+     To figure out the number of observations required to achieve
+       desired error/CI.
+   Potential issues to overcome:
+     Autocorrelation, e.g. inventory cost for subsequent weeks lack
+      statistical independence.
+     Initial conditions, e.g. inventory on hand and # of backorders at
+      time 0 would most likely influence the performance of week 1.
+                                                                          2
+Outline
+ Distinguish the two types of simulation: transient vs.
+  steady state.
+ Illustrate the inherent variability in a stochastic discrete-
+  event simulation.
+ Cover the statistical estimation of performance measures.
+ Discusses the analysis of transient simulations.
+ Discusses the analysis of steady-state simulations.
+
+
+
+
+                                                             3
+Type of Simulations
+ Terminating verses non-terminating simulations
+ Terminating simulation:
+     Runs for some duration of time TE, where E is a specified event
+      that stops the simulation.
+     Starts at time 0 under well-specified initial conditions.
+     Ends at the stopping time TE.
+     Bank example: Opens at 8:30 am (time 0) with no customers
+      present and 8 of the 11 teller working (initial conditions), and
+      closes at 4:30 pm (Time TE = 480 minutes).
+     The simulation analyst chooses to consider it a terminating
+      system because the object of interest is one day’s operation.
+
+
+
+
+                                                                         4
+Type of Simulations
+   Non-terminating simulation:
+     Runs continuously, or at least over a very long period of time.
+     Examples: assembly lines that shut down infrequently, telephone
+      systems, hospital emergency rooms.
+     Initial conditions defined by the analyst.
+     Runs for some analyst-specified period of time TE.
+     Study the steady-state (long-run) properties of the system,
+      properties that are not influenced by the initial conditions of the
+      model.
+   Whether a simulation is considered to be terminating or
+    non-terminating depends on both
+     The objectives of the simulation study and
+     The nature of the system.
+
+                                                                            5
+Stochastic Nature of Output Data
+ Model output consist of one or more random variables (r.
+  v.) because the model is an input-output transformation
+  and the input variables are r.v.’s.
+ M/G/1 queueing example:
+     Poisson arrival rate = 0.1 per minute;
+      service time ~ N(µ = 9.5, σ =1.75).
+     System performance: long-run mean queue length, LQ(t).
+     Suppose we run a single simulation for a total of 5,000 minutes
+         Divide the time interval [0, 5000) into 5 equal subintervals of 1000
+          minutes.
+         Average number of customers in queue from time (j-1)1000 to
+          j(1000) is Yj .
+
+
+
+                                                                                 6
+Stochastic Nature of Output Data
+   M/G/1 queueing example (cont.):
+     Batched average queue length for 3 independent replications:
+               Batching Interval                        Replication
+                    (minutes)      Batch, j   1, Y 1j      2, Y 2j    3, Y 3j
+             [0, 1000)                1       3.61         2.91       7.67
+             [1000, 2000)             2       3.21         9.00       19.53
+             [2000, 3000)             3       2.18        16.15       20.36
+             [3000, 4000)             4       6.92        24.53       8.11
+             [4000, 5000)             5       2.82        25.19       12.62
+             [0, 5000)                        3.75        15.56       13.66
+
+
+
+     Inherent variability in stochastic simulation both within a single
+      replication and across different replications.
+     The average across 3 replications, Y1. , Y2. , Y3. ,can be regarded as
+      independent observations, but averages within a replication, Y11,
+      …, Y15, are not.
+
+
+                                                                                7
+Measures of performance
+   Consider the estimation of a performance parameter, θ (or
+    φ), of a simulated system.
+     Discrete time data: [Y1, Y2, …, Yn], with ordinary mean: θ
+     Continuous-time data: {Y(t), 0 < t < TE} with time-weighted mean:
+       φ
+   Point estimation for discrete time data.
+     The point estimator:                       n
+                                             1
+                                         "ˆ = ! Yi
+                                             n i =1
+                               E (!ˆ) = !    Desired
+            Is unbiased if:E (!ˆ) " !
+
+              Is biased if:
+
+
+                                                                      8
+Point Estimator                             [Performance Measures]
+
+   Point estimation for continuous-time data.
+     The point estimator:
+                              ˆ  1 TE
+                             " = ! Y (t )dt
+                                TE 0
+         Is biased in general where: E (!ˆ) " ! .
+         An unbiased or low-bias estimator is desired.
+
+   Usually, system performance measures can be put into
+    the common framework of θ or φ:
+     e.g., the proportion of days on which sales are lost through an out-
+      of-stock situation, let:            #1, if out of stock on day i
+                                 Y (t ) = "
+                                          !0, otherwise
+
+
+
+                                                                         9
+Point Estimator                                [Performance Measures]
+
+   Performance measure that does not fit: quantile or
+    percentile: Pr{Y ! " } = p
+     Estimating quantiles: the inverse of the problem of estimating a
+      proportion or probability.
+     Consider a histogram of the observed values Y:
+           Find !ˆ such that 100p% of the histogram is to the left of (smaller
+            than) !ˆ .
+
+
+
+
+                                                                                  10
+Confidence-Interval Estimation
+                                         [Performance Measures]
+
+   To understand confidence intervals fully, it is important to
+    distinguish between measures of error, and measures of
+    risk, e.g., confidence interval versus prediction interval.
+
+   Suppose the model is the normal distribution with mean θ,
+    variance σ2 (both unknown).
+     Let Yi be the average cycle time for parts produced on the ith
+      replication of the simulation (its mathematical expectation is θ).
+     Average cycle time will vary from day to day, but over the long-run
+      the average of the averages will be close to θ.
+                                                        1 R
+     Sample variance across R replications:
+                                                S =2
+
+                                                      R "1
+                                                           ! (Y " Y )
+                                                            i =1
+                                                                   i.
+                                                                         2
+                                                                        ..
+
+
+
+
+                                                                             11
+Confidence-Interval Estimation
+                                                 [Performance Measures]
+
+   Confidence Interval (CI):
+     A measure of error.
+     Where Yi. are normally distributed.
+
+                                            S
+                       Y.. ± t" / 2, R !1
+                                             R
+     We cannot know for certain how far Y.. is from θ but CI attempts to
+      bound that error.
+     A CI, such as 95%, tells us how much we can trust the interval to
+      actually bound the error between Y.. and θ .
+     The more replications we make, the less error there is in Y..
+      (converging to 0 as R goes to infinity).
+
+
+
+
+                                                                          12
+Confidence-Interval Estimation
+                                                     [Performance Measures]
+
+   Prediction Interval (PI):
+     A measure of risk.
+     A good guess for the average cycle time on a particular day is our
+      estimator but it is unlikely to be exactly right.
+     PI is designed to be wide enough to contain the actual average
+      cycle time on any particular day with high probability.
+     Normal-theory prediction interval:
+
+                                                 1
+                       Y.. ± t" / 2, R !1S 1 +
+                                                 R
+
+     The length of PI will not go to 0 as R increases because we can
+      never simulate away risk.
+     PI’s limit is: " ± z# / 2!
+
+                                                                              13
+Output Analysis for Terminating Simulations
+ A terminating simulation: runs over a simulated time
+  interval [0, TE].
+ A common goal is to estimate:
+                   '1 n $
+             + = E % ) Yi ",         for discrete output
+                   & n i =1 #
+                    ' 1 TE        $
+             * = E %% ( Y (t )dt "", for continuous output Y (t ),0 ! t ! TE
+                    & TE 0        #
+
+   In general, independent replications are used, each run
+    using a different random number stream and
+    independently chosen initial conditions.
+
+
+                                                                               14
+Statistical Background
+                                          [Terminating Simulations]
+
+ Important to distinguish within-replication data from
+  across-replication data.
+ For example, simulation of a manufacturing system
+     Two performance measures of that system: cycle time for parts
+      and work in process (WIP).
+     Let Yij be the cycle time for the jth part produced in the ith
+      replication.
+     Across-replication data are formed by summarizing within-
+      replication data Yi.
+
+
+
+
+                                                                       15
+Statistical Background
+                                                 [Terminating Simulations]
+
+   Across Replication:
+     For example: the daily cycle time averages (discrete time data)
+                                  1 R
+           The average:     Y.. = ! Yi.
+                                  R i =1
+            The sample variance:          1 R
+                                              !
+        
+                                     S =
+                                       2
+                                                    (Yi. " Y.. ) 2
+                                         R " 1 i =1
+            The confidence-interval half-width:                           S
+        
+                                                       H = t" / 2, R !1
+                                                                           R
+   Within replication:
+     For example: the WIP (a continuous time data)
+                                    1 TEi
+           The average:     Yi. =
+                                   T Ei !0
+                                           Yi (t )dt
+
+           The sample variance:
+                                     S =
+                                      i
+                                       2  1 TEi
+                                              !  (
+                                                 Y i (t ) " Y   )2
+                                                             i . dt
+                                         T Ei  0
+
+
+
+                                                                               16
+Statistical Background
+                                    [Terminating Simulations]
+
+   Overall sample average, Y.. , and the interval replication
+    sample averages, Yi. , are always unbiased estimators of
+    the expected daily average cycle time or daily average
+    WIP.
+
+   Across-replication data are independent (different random
+    numbers) and identically distributed (same model), but
+    within-replication data do not have these properties.
+
+
+
+
+                                                                17
+C.I. with Specified Precision
+                                                [Terminating Simulations]
+
+   The half-length H of a 100(1 – α)% confidence interval for
+    a mean θ, based on the t distribution, is given by:
+                                          S
+                       H = t" / 2, R !1
+                                           R
+                 R is the # of                 S2 is the sample
+                 replications                      variance
+
+
+
+
+   Suppose that an error criterion ε is specified with
+    probability 1 - α, a sufficiently large sample size should
+    satisfy:
+                       (
+                    P Y.. $ # < " % 1 $ ! )
+
+                                                                            18
+C.I. with Specified Precision
+                                              [Terminating Simulations]
+
+ Assume that an initial sample of size R0 (independent)
+  replications has been observed.
+ Obtain an initial estimate S0 of the population variance σ2.
+                                   2
+
+ Then, choose sample size R such that R ≥ R0:
+    Since t! /2, R"1 # z! /2 a lower bound on R:
+                                 2
+                     $z S '
+                 R ! & " /2 0 ) , z" /2 is the standard normal distribution.
+                     % # (                                                   2
+                                                                & t     S  #
+     R is the smallest integer satisfying R ≥ R0 and R ' $ * / 2, R (1 0 !
+                                                                $    )     !
+                                                                %          "
+ Collect R - R0 additional observations.
+ The 100(1-α)% C.I. for θ:
+                                                      S
+                                   Y.. ± t" / 2, R !1
+                                                       R
+
+
+                                                                                 19
+C.I. with Specified Precision
+                                                           [Terminating Simulations]
+   Call Center Example: estimate the agent’s utilization ρ over the first 2
+    hours of the workday.
+      Initial sample of size R0 = 4 is taken and an initial estimate of the
+       population variance is S02 = (0.072)2 = 0.00518.
+      The error criterion is ε = 0.04 and confidence coefficient is 1-α = 0.95,
+       hence, the final sample size must be at least:
+                                       2  2
+                       & z0.025 S 0 # 1.96 * 0.00518
+                       $            ! =              = 12.14
+                       %     '      "      0 . 04 2
+
+
+        For the final sample size:
+                            R                13     14          15
+                       t 0.025, R-1         2.18    2.16       2.14
+                     (t" / 2,R #1S0 / ! )
+                                        2
+                                            15.39   15.1       14.83
+
+
+      R = 15 is the smallest integer satisfying the error criterion, so R - R0 = 11
+       additional replications are needed.
+      After obtaining additional outputs, half-width should be checked.
+
+
+
+                                                                                       20
+Quantiles                               [Terminating Simulations]
+
+ In this book, a proportion or probability is treated as a special
+  case of a mean.
+ When the number of independent replications Y1, …, YR is
+  large enough that tα/2,n-1 = zα/2, the confidence interval for a
+  probability p is often written as:
+                                          pˆ (1 ! pˆ )
+                          ˆp ± z" / 2
+                                             R !1
+         The sample proportion
+
+   A quantile is the inverse of the probability to the probability
+    estimation problem:                            p is given
+
+                    Find θ such that Pr(Y ≤ θ) = p
+
+
+                                                                      21
+Quantiles                                   [Terminating Simulations]
+
+   The best way is to sort the outputs and use the (R*p)th
+    smallest value, i.e., find θ such that 100p% of the data in a
+    histogram of Y is to the left of θ.
+     Example: If we have R=10 replications and we want the p = 0.8
+       quantile, first sort, then estimate θ by the (10)(0.8) = 8th smallest
+       value (round if necessary).
+                                         5.6 sorted data
+                                         7.1
+                                         8.8
+                                         8.9
+                                         9.5
+                                         9.7
+                                         10.1
+                                         12.2 this is our point estimate
+                                         12.5
+                                         12.9
+                                                                            22
+Quantiles                                   [Terminating Simulations]
+
+   Confidence Interval of Quantiles: An approximate (1-α)100%
+    confidence interval for θ can be obtained by finding two values
+    θl and θu.
+     θl cuts off 100pl% of the histogram (the Rpl smallest value of the
+      sorted data).
+     θu cuts off 100pu% of the histogram (the Rpu smallest value of the
+      sorted data).
+                                                  p (1 ! p )
+                         where p! = p ! z" / 2
+                                                    R !1
+                                                  p (1 ! p )
+                                pu = p + z" / 2
+                                                    R !1
+
+
+
+
+                                                                        23
+Quantiles                                            [Terminating Simulations]
+
+   Example: Suppose R = 1000 reps, to estimate the p = 0.8
+    quantile with a 95% confidence interval.
+     First, sort the data from smallest to largest.
+     Then estimate of θ by the (1000)(0.8) = 800th smallest value, and
+      the point estimate is 212.03.
+                                                                A portion of the 1000
+     And find the confidence interval:                            sorted values:
+                                                                 Output      Rank
+                                .8(1 ! .8)                       180.92       779
+              p! = 0.8 ! 1.96              = 0.78                188.96       780
+                                1000 ! 1                         190.55       781
+                                .8(1 ! .8)                       208.58       799
+              pu = 0.8 + 1.96              = 0.82                212.03       800
+                                1000 ! 1                         216.99       801
+       The c.i. is the 780 th and 820 th smallest values         250.32       819
+                                                                 256.79       820
+                                                                 256.99       821
+
+
+     The point estimate is 212.03, the 95% c.i. is [188.96, 256.79]
+                                                                                        24
+Output Analysis for Steady-State Simulation
+   Consider a single run of a simulation model to estimate a
+    steady-state or long-run characteristics of the system.
+     The single run produces observations Y1, Y2, ... (generally the
+      samples of an autocorrelated time series).
+     Performance measure:
+                         1 n
+               $ = lim ! Yi ,           for discrete measure    (with probability 1)
+                    n #" n i =1
+
+                          1 TE
+               $ = lim ! Y (t )dt ,    for continuous measure      (with probability 1)
+                   TE #" TE
+                            0
+
+
+
+           Independent of the initial conditions.
+
+
+
+
+                                                                                          25
+Output Analysis for Steady-State Simulation
+   The sample size is a design choice, with several
+    considerations in mind:
+     Any bias in the point estimator that is due to artificial or arbitrary
+      initial conditions (bias can be severe if run length is too short).
+     Desired precision of the point estimator.
+     Budget constraints on computer resources.
+   Notation: the estimation of θ from a discrete-time output
+    process.
+     One replication (or run), the output data: Y1, Y2, Y3, …
+     With several replications, the output data for replication r: Yr1, Yr2,
+       Yr3, …
+
+
+
+
+                                                                            26
+Initialization Bias                        [Steady-State Simulations]
+
+   Methods to reduce the point-estimator bias caused by using
+    artificial and unrealistic initial conditions:
+      Intelligent initialization.
+      Divide simulation into an initialization phase and data-collection
+       phase.
+   Intelligent initialization
+      Initialize the simulation in a state that is more representative of
+       long-run conditions.
+      If the system exists, collect data on it and use these data to specify
+       more nearly typical initial conditions.
+      If the system can be simplified enough to make it mathematically
+       solvable, e.g. queueing models, solve the simplified model to find
+       long-run expected or most likely conditions, use that to initialize the
+       simulation.
+
+
+                                                                             27
+Initialization Bias                          [Steady-State Simulations]
+
+   Divide each simulation into two phases:
+     An initialization phase, from time 0 to time T0.
+     A data-collection phase, from T0 to the stopping time T0+TE.
+     The choice of T0 is important:
+           After T0, system should be more nearly representative of steady-state
+            behavior.
+     System has reached steady state: the probability distribution of the
+       system state is close to the steady-state probability distribution
+       (bias of response variable is negligible).
+
+
+
+
+                                                                             28
+Initialization Bias                        [Steady-State Simulations]
+
+   M/G/1 queueing example: A total of 10 independent
+    replications were made.
+     Each replication beginning in the empty and idle state.
+     Simulation run length on each replication was T0+TE = 15,000
+      minutes.
+     Response variable: queue length, LQ(t,r) (at time t of the rth
+      replication).
+     Batching intervals of 1,000 minutes, batch means
+   Ensemble averages:
+     To identify trend in the data due to initialization bias
+     The average corresponding batch means across replications:
+                              1 R
+                        Y. j = ! Yrj             R replications
+                              R r =1
+     The preferred method to determine deletion point.
+
+                                                                       29
+Initialization Bias                       [Steady-State Simulations]
+
+   A plot of the ensemble averages,       Y .. , versus 1000j, for j =
+    1,2, …,15.
+
+
+
+
+     Illustrates the downward bias of the initial observations.
+
+
+
+                                                                     30
+Initialization Bias                     [Steady-State Simulations]
+
+   Cumulative average sample mean (after deleting d
+                                               n
+    observations):                      1
+                        Y.. (n, d ) =        !     Y. j
+                                      n " d j = d +1
+     Not recommended to determine the initialization phase.
+
+
+
+
+     It is apparent that downward bias is present and this bias can be
+       reduced by deletion of one or more observations.
+                                                                     31
+Initialization Bias                   [Steady-State Simulations]
+
+ No widely accepted, objective and proven technique to
+  guide how much data to delete to reduce initialization bias
+  to a negligible level.
+ Plots can, at times, be misleading but they are still
+  recommended.
+     Ensemble averages reveal a smoother and more precise trend as
+      the # of replications, R, increases.
+     Ensemble averages can be smoothed further by plotting a moving
+      average.
+     Cumulative average becomes less variable as more data are
+      averaged.
+     The more correlation present, the longer it takes for Y. j to
+      approach steady state.
+     Different performance measures could approach steady state at
+      different rates.
+                                                                 32
+Error Estimation                               [Steady-State Simulations]
+
+   If {Y1, …, Yn} are not statistically independent, then S2/n
+    is a biased estimator of the true variance.
+     Almost always the case when {Y1, …, Yn} is a sequence of output
+       observations from within a single replication (autocorrelated
+       sequence, time-series).
+   Suppose the point estimator θ is the sample mean
+                            Y = !i =1 Yi / n
+                                    n
+
+
+
+
+     Variance of Y is almost impossible to estimate.
+     For system with steady state, produce an output process that is
+       approximately covariance stationary (after passing the transient
+       phase).
+           The covariance between two random variables in the time series
+            depends only on the lag (the # of observations between them).
+
+                                                                             33
+Error Estimation                                 [Steady-State Simulations]
+
+   For a covariance stationary time series, {Y1, …, Yn}:
+     Lag-k autocovariance is:       ! k = cov(Y1 ,Y1+ k ) = cov(Yi ,Yi + k )
+
+     Lag-k autocorrelation is:
+                                            "k
+                                     #k =
+                                            !2
+   If a time series is covariance stationary, then the variance
+    of Y is:             02 &   n -1
+                                     , k) #
+                   V (Y ) =     $1 + 2. *1 - ' / k !
+                              n %     k =1 + n( "
+
+                                            c
+   The expected value of the variance estimator is:
+                ' S2 $                            n / c !1
+             E %% "" = BV (Y ),     where B =
+                & n #                              n !1
+                                                                                34
+Error Estimation                    [Steady-State Simulations]
+
+
+
+ Stationary time series Yi
+   exhibiting positive
+   autocorrelation.
+
+ Stationary time series Yi
+   exhibiting negative
+   autocorrelation.
+
+ Nonstationary time series with
+   an upward trend
+
+
+
+
+                                                             35
+Error Estimation                              [Steady-State Simulations]
+
+   The expected value of the variance estimator is:
+         ' S2 $                        n / c !1
+      E %% "" = BV (Y ),   where B =            and V (Y ) is the variance of Y
+         & n #                          n !1
+
+
+     If Yi are independent, then S2/n is an unbiased estimator of V (Y )
+     If the autocorrelation γk are primarily positive, then S2/n is biased
+      low as an estimator of V (Y ) .
+     If the autocorrelation γk are primarily negative, then S2/n is biased
+      high as an estimator of V (Y ) .
+
+
+
+
+                                                                                  36
+Replication Method                               [Steady-State Simulations]
+
+   Use to estimate point-estimator variability and to construct a
+    confidence interval.
+   Approach: make R replications, initializing and deleting from each
+    one the same way.
+   Important to do a thorough job of investigating the initial-condition
+    bias:
+        Bias is not affected by the number of replications, instead, it is affected
+         only by deleting more data (i.e., increasing T0) or extending the length of
+         each run (i.e. increasing TE).
+   Basic raw output data {Yrj, r = 1, ..., R; j = 1, …, n} is derived by:
+      Individual observation from within replication r.
+      Batch mean from within replication r of some number of discrete-time
+       observations.
+      Batch mean of a continuous-time process over time interval j.
+
+
+
+                                                                                 37
+Replication Method                                       [Steady-State Simulations]
+
+ Each replication is regarded as a single sample          n
+                                                                for
+                                                    1
+  estimating θ. For replication r: Yr . (n, d ) =        !     Yrj
+                                                  n " d j = d +1
+ The overall point estimator:
+                      1 R
+         Y.. (n, d ) = " Yr . (n, d )        and      E[Y.. (n, d )] = ! n ,d
+                      R r =1
+   If d and n are chosen sufficiently large:
+     θn,d ~ θ.
+     Y.. ( n, d ) is an approximately unbiased estimator of θ.
+   To estimate standard error of Y.. , the sample variance and
+    standard error:
+             1 R                         1 & R 2               2#                          S
+        S =
+         2
+                  (
+            R ' 1 r =1
+                       (Yr. ' Y.. ) 2
+                                      =       $ (
+                                        R ' 1 % r =1
+                                                     Yr. ' RY.. !
+                                                                "
+                                                                    and     s.e.(Y.. ) =
+                                                                                            R
+
+                                                                                                38
+Replication Method                             [Steady-State Simulations]
+
+ Length of each replication (n) beyond deletion point (d):
+                     (n - d) > 10d
+ Number of replications (R) should be as many as time
+  permits, up to about 25 replications.
+ For a fixed total sample size (n), as fewer data are deleted
+  ( d):
+     C.I. shifts: greater bias.
+     Standard error of Y.. ( n, d )   decreases: decrease variance.
+
+
+                   Reducing                 Increasing
+                     bias       Trade off
+                                              variance
+
+
+
+                                                                        39
+Replication Method                                    [Steady-State Simulations]
+
+   M/G/1 queueing example:
+     Suppose R = 10, each of length TE = 15,000 minutes, starting at
+      time 0 in the empty and idle state, initialized for T0 = 2,000
+      minutes before data collection begins.
+     Each batch means is the average number of customers in queue
+      for a 1,000-minute interval.
+     The 1st two batch means are deleted (d = 2).
+     The point estimator and standard error are:
+              Y.. (15,2) = 8.43        and        s.e.(Y.. (15,2) )= 1.59
+     The 95% C.I. for long-run mean queue length is:
+                 Y.. " t# / 2, R "1S / R ! $ ! Y.. + t# / 2, R "1S / R
+                 8.43 " 2.26(1.59) ! LQ ! 8.42 + 2.26(1.59)
+
+     A high degree of confidence that the long-run mean queue length
+      is between 4.84 and 12.02 (if d and n are “large” enough).
+                                                                               40
+Sample Size                            [Steady-State Simulations]
+
+ To estimate a long-run performance measure, θ, within ± !
+  with confidence 100(1-α)%.
+ M/G/1 queueing example (cont.):
+     We know: R0 = 10, d = 2 and S02 = 25.30.
+     To estimate the long-run mean queue length, LQ, within ε = 2
+      customers with 90% confidence (α= 10%).
+     Initial estimate:         2      2
+                             & z S # 1.645 (25.30)
+                         R ' $ 0.05 0 ! =          = 17.1
+                             % ( "
+                                            2
+                                          2
+
+     Hence, at least 18 replications are needed, next try R = 18,19, …
+              R # (t0.05, R"1S 0 / ! ) . We found that:
+                                 2
+      using
+
+              R = 19 ! (t0.05,19"1S 0 / # ) = (1.74 * 25.3 / 2) 2 = 18.93
+                                        2
+
+
+
+     Additional replications needed is R – R0 = 19-10 = 9.
+
+                                                                            41
+Sample Size                         [Steady-State Simulations]
+
+   An alternative to increasing R is to increase total run
+    length T0+TE within each replication.
+     Approach:
+         Increase run length from (T0+TE) to (R/R0)(T0+TE), and
+         Delete additional amount of data, from time 0 to time (R/R0)T0.
+
+     Advantage: any residual bias in the point estimator should be
+      further reduced.
+     However, it is necessary to have saved the state of the model at
+      time T0+TE and to be able to restart the model.
+
+
+
+
+                                                                            42
+Batch Means for Interval Estimation
+                                             [Steady-State Simulations]
+   Using a single, long replication:
+      Problem: data are dependent so the usual estimator is biased.
+      Solution: batch means.
+
+   Batch means: divide the output data from 1 replication (after
+    appropriate deletion) into a few large batches and then treat the
+    means of these batches as if they were independent.
+   A continuous-time process, {Y(t), T0 ≤ t ≤ T0+TE}:
+      k batches of size m = TE/k, batch means:
+
+                     1 jm
+                   Yj =
+                     m !( j "1) m
+                                  Y (t + T0 )dt
+
+ A discrete-time process, {Yi, i = d+1,d+2, …, n}:
+                                                                jm
+    k batches of size m = (n – d)/k, batch means: Y = 1
+                                                    j         !     Yi + d
+                                                       m i =( j "1) m +1
+                                                                             43
+Batch Means for Interval Estimation
+                                                                    [Steady-State Simulations]
+
+     Y1 , ..., Yd , Yd +1 , ..., Yd + m , Yd + m +1 , ..., Yd + 2 m , ... , Yd + ( k !1) m +1 , ..., Yd + km
+        deleted             Y1                       Y2                                     Yk
+   Starting either with continuous-time or discrete-time data, the
+    variance of the sample mean is estimated by:
+                             S   2
+                                  1
+                                        k
+                                            (Y j " Y )2 = k Y j2 " kY 2
+                              k
+                                =      ! k "1
+                                  k j =1                    ! k (k " 1)
+                                                             j =1
+
+
+ If the batch size is sufficiently large, successive batch means
+  will be approximately independent, and the variance estimator
+  will be approximately unbiased.
+ No widely accepted and relatively simple method for choosing
+  an acceptable batch size m (see text for a suggested
+  approach). Some simulation software does it automatically.
+                                                                                                               44
+Summary
+   Stochastic discrete-event simulation is a statistical experiment.
+      Purpose of statistical experiment: obtain estimates of the performance
+       measures of the system.
+      Purpose of statistical analysis: acquire some assurance that these
+       estimates are sufficiently precise.
+   Distinguish: terminating simulations and steady-state simulations.
+   Steady-state output data are more difficult to analyze
+      Decisions: initial conditions and run length
+      Possible solutions to bias: deletion of data and increasing run length
+
+   Statistical precision of point estimators are estimated by standard-
+    error or confidence interval
+   Method of independent replications was emphasized.
+
+
+
+                                                                                45
+

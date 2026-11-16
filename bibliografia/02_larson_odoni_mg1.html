@@ -1,0 +1,1213 @@
+<html>
+
+
+
+<head>
+
+<title>Section 4.7</title>
+
+</head>
+
+
+
+<body BGCOLOR="WHITE">
+
+
+
+<p><a href="4.8.html"><img src="images/next.gif" valign="top"
+align="left" width="37"
+
+height="24"></a> <a href="contents4.html"><img src="images/contents.gif"
+valign="top"
+
+align="left" width="65" height="24"></a> <a href="4.6.5.html"><img
+
+src="images/previous.gif" valign="top" align="left" width="63"
+height="24"></a> </p>
+
+
+
+<p><br>
+
+<br>
+
+</p>
+
+
+
+<hr>
+
+<!--table-->
+
+
+
+<table BORDER="0" WIDTH="80%" CELLPADDING="10">
+
+  <tr>
+
+    <td><h2><big>4.7 Spatially Distributed Queues And The M/G/1 Queueing
+System</big></h2>
+
+    <p>As we have already mentioned at the beginning of this chapter,
+many queueing systems in
+
+    the urban environment do not fit neatly into the classical mold of a
+physically stationary
+
+    server where prospective &quot;customers&quot; arrive and queue up
+until they receive
+
+    service. For most of the emergency urban services-where
+&quot;arrivals of customers&quot;
+
+    are perceived through telephone calls (or other means of
+telecommunication) from various
+
+    locations in a citythe only place at which a &quot;queue&quot; can
+be identified is on the
+
+    emergency system's dispatcher's desk (or in a computer's memory),
+where records indicate
+
+    the time, origin, and nature of a succession of requests for
+service. The server, then, be
+
+    it a person or a vehicle, must travel to the location of these
+incidents to provide the
+
+    required service. In such cases we have a <em>spatially
+distributed</em> <em>queue. </em><br>
+
+    &nbsp;&nbsp;&nbsp; In this section we shall discuss the simplest
+possible type of
+
+    spatially distributed queue in which a single server has sole
+responsibility for a given
+
+    district. This discussion will also motivate our derivation of some
+important results for
+
+    M/G/1 queueing systems.</p>
+
+    <blockquote>
+
+      <p><strong><em>Example 1: Ambulance Service to an Emergency
+Medical Facility</em></strong></p>
+
+      <p>Consider the case pictured in Figure 4.10: an emergency medical
+facility (EMF) is
+
+      located at the center (the point where the diagonals intersect) of
+a rectangular district
+
+      with dimensions <strong>X<small><sub>0</sub></small></strong> ×
+<strong>Y<small><sub>0 </sub></small></strong>miles.
+
+      The EMF has a single ambulance vehicle associated with it, which
+is dispatched to
+
+      emergency patients and transports them to the EMF. The ambulance,
+when idle, is always
+
+      located at the EMF. </p>
+
+      <p align="center"><img src="images/fig.4.10.gif" width="521"
+height="265"
+
+      alt="fig.4.10.gif (13489 bytes)"></p>
+
+      <p>&nbsp;&nbsp;&nbsp; Directions of travel are parallel to the
+boundaries of the district
+
+      and the effective travel speeds are
+<em>v<small><small><sub>x</sub></small></small></em>.
+
+      and <em>v<small><small><sub>y</sub></small></small></em>
+(constants) in the x and y
+
+      directions, as shown in Figure 4.10. <br>
+
+      &nbsp;&nbsp;&nbsp; In this district, incidents (each corresponding
+to one emergency
+
+      patient) occur as a Poisson process in time at a rate of A per
+hour. Incident locations
+
+      are independent of each other and are <em>uniformly</em>
+distributed over the rectangular
+
+      area. Every time an incident occurs, the ambulance, if at the EMF,
+is immediately
+
+      dispatched to the location of the call, picks up the patient, and
+returns to the EMF. If
+
+      the ambulance is away, calls queue up and are processed in a FIFO
+order. We shall assume
+
+      for now that no calls are ever lost, no matter how long they have
+to wait. We shall also
+
+      assume that the pdf for the time, Z, that the ambulance spends at
+the location of each
+
+      call for service is known and is given by
+<em>f<sub>z</sub>(z)</em> with an expectation Z
+
+      and a variance <img src="images/sigma2.gif" width="14" height="13"
+
+      alt="sigma2.gif (521 bytes)"><sub>z</sub>. <br>
+
+      &nbsp;&nbsp;&nbsp; The service time, S, in this system clearly
+consists of a &nbsp;
+
+      &quot;travel-time&quot; component and a &quot;time on the
+scene&quot; component. Assuming
+
+      that effective travel speeds are identical on both the
+EMF-to-incident and the
+
+      incident-toEMF portions of each trip, we have </p>
+
+      <p align="center"><img src="images/form4.59.gif" width="348"
+height="24"
+
+      alt="form4.59.gif (2530 bytes)"></p>
+
+      <p>where T<small><sub>x</sub></small> =
+D<small><sub>x</sub></small>/<em>v<small><sub>x</sub></small></em>,
+
+      and T<small><small><sub>y</sub></small></small> =
+D<small><sub>y</sub></small><em>/v<small><small><sub>y</sub></small></small></em>,
+
+      and D<small><sub>x </sub></small>and D<small><sub>y</sub></small>
+are defined as the
+
+      distances along the x and the y axes, respectively, from (to) the
+EMF to (from) the
+
+      location of an incident. <br>
+
+      &nbsp;&nbsp;&nbsp; With the techniques presented in Chapter 3, it
+is an easy matter to
+
+      obtain the expected value of S, which for consistency with our
+queueing theory notation we
+
+      shall denote as 1/<img src="images/mu.gif" width="10" height="11"
+alt="mu.gif (300 bytes)">:
+
+      </p>
+
+      <p align="center"><img src="images/form4.60.gif" width="541"
+height="154"
+
+      alt="form4.60.gif (21632 bytes)"></p>
+
+      <p>&nbsp;&nbsp;&nbsp; If <em>f<small><sub>z</sub></small></em>(z),
+as we have already
+
+      assumed, is known, it is also possible, at least in principle, to
+obtain an expression for
+
+      f<small><sub>s</sub></small>(s), the service-time pdf. The
+derivation, however, even for
+
+      the simple situation described here, promises to be tedious and
+time-consuming and will be
+
+      omitted. It suffices to note that f<small><sub>s</sub></small>(s)
+cannot be a negative
+
+      exponential pdf [unless
+f<small><small><sub>z</sub></small></small>(z) is negative
+
+      exponential <em>and</em> the expected time on the scene is much
+larger than the average
+
+      round-trip time, in which case it can be argued that 1/<img
+src="images/mu.gif" width="10"
+
+      height="11" alt="mu.gif (300 bytes)"> <img src="images/approx.gif"
+width="10" height="7"
+
+      alt="approx.gif (57 bytes)"> Z and, therefore, that
+f<small><sub>s</sub></small>(s) is
+
+      approximately negative exponential as well
+<small><sup>7</sup></small>]. It is therefore
+
+      clear that results derived for the single-server queueing systems
+we have seen so far (<em>M/M/1</em>)
+
+      do not apply in this case, since the service-time distribution at
+hand is a
+
+      &quot;general&quot; one. </p>
+
+    </blockquote>
+
+    <p>We shall now proceed to derive several important results for this
+M/G/1 queueing
+
+    system. Interestingly, as we shall see, most of the results require
+no knowledge of the
+
+    service-time distribution, f<small><sub>s</sub></small>(s), other
+than its mean, 1/<img
+
+    src="images/mu.gif" width="10" height="11" alt="mu.gif (300
+bytes)">, and variance <img
+
+    src="images/a2s.gif" width="20" height="18" alt="a2s.gif (1044
+bytes)">. </p>
+
+    <p>&nbsp;&nbsp;&nbsp; Recall first that the current state of
+<em>M/M/1 (or M/M/m)</em>
+
+    queueing systems is fully described by a single item of information,
+the number of users
+
+    (i.e., of calls in our EMF example) currently in the system.
+Knowledge of this number is
+
+    sufficient to describe all the past history of the queueing system,
+as far as the future
+
+    is concerned. For instance, if it is known that at some time
+instant, t, there are exactly<em>
+
+    n (&gt; 0)</em> calls in a M/M/1 system (with one call receiving
+service and the other n -
+
+    1 calls in the waiting line), then we can immediately state that the
+probability thatin
+
+    the next <em><img src="images/delta.gif" width="13" height="15"
+
+    alt="delta.gif (317 bytes)">t</em> a service will be completed is
+equal to <img
+
+    src="images/mu.gif" width="10" height="11" alt="mu.gif (300
+bytes)"><em><img
+
+    src="images/delta.gif" width="13" height="15" alt="delta.gif (317
+bytes)">t</em>-independently
+
+    of what else has happened in the past at that M/M/1 system. For
+M/G/1 systems, however,
+
+    this probability also depends on how long ago service began to the
+call that is currently
+
+    receiving service. Thus, a complete description of the current state
+of a M/G/1 system
+
+    requires, in general, specification of the values of two random
+variables, the number of
+
+    calls currently in the system, and the time since the current
+service began, the latter of
+
+    which is a continuous random variable. These complications make the
+mathematical analysis
+
+    of M/G/1 systems more difficult than that of <em>M/M/1</em> or<em>
+M/M/m</em> systems. <br>
+
+    &nbsp;&nbsp;&nbsp; Of the several different approaches that have
+been developed, the
+
+    simplest one uses the trick of focusing attention on certain
+specific instants in time,
+
+    known as <em>epochs</em>, when knowledge of only the number of calls
+currently in the
+
+    queueing system is sufficient to specify its current state. Those
+instants of time are the
+
+    times of completion of a service by the server (i.e., the instants
+after the ambulance has
+
+    returned to the EMF and delivered a patient, in the case of our
+example). <br>
+
+    &nbsp;&nbsp;&nbsp; Let us then indicate these time instants as
+t<small><small><sub>1</sub></small></small>,
+
+    t<small><small><sub>2</sub></small></small>,
+t<small><small><sub>3</sub></small></small> .
+
+    . . with ti, representing the instant when service to the<em>
+i</em>th patient to be
+
+    transported to the EMF (beginning with some arbitrary time t = 0) is
+completed. A specific
+
+    example for a hypothetical M/G/1 queueing system is shown in Figure
+4.11. </p>
+
+    <p><img src="images/fig4.11.gif" width="538" height="315"
+alt="fig4.11.gif (19236 bytes)"></p>
+
+    <p>We can then define: </p>
+
+    <blockquote>
+
+      <p>N = number of calls in the queueing system (i.e., the number of
+patients/incidents
+
+      waiting for service) just after the instant
+<big>t</big><small><small><sub>i-1</sub></small></small>
+
+      when service to the (<em>i</em> - 1)th patient is completed </p>
+
+      <p>R = number of <em>new</em> calls that arrive at the queueing
+system during the service
+
+      time of the next patient to receive service (patient <em>i</em>)
+</p>
+
+      <p>N' = number of calls in the queueing system just after
+<big>t</big><small><sub>i</sub></small>,
+
+      the instant of completion of service to patient <em>i </em></p>
+
+    </blockquote>
+
+    <p>&nbsp;&nbsp;&nbsp; Note that, by definition, R includes only
+those calls that arrive at
+
+    the queueing system <em>after</em> service to the next patient
+(patient<em> i</em>) has
+
+    started. This is important for the cases when, upon completion of a
+service, the queueing
+
+    system is left empty (i.e., no more calls left to serve). For
+instance, the value of R for
+
+    the time interval between
+<big>t</big><small><small><sub>5</sub></small></small> and
+<big>t</big><small><small><sub>6</sub></small></small>,
+
+    is 0 <em>(not 1)</em> for the sample case shown in Figure 4.11. <br>
+
+    &nbsp;&nbsp;&nbsp; The following relationship exists between the
+random variables N, R,
+
+    and N': </p>
+
+    <p align="center"><img src="images/form4.62.gif" width="415"
+height="50"
+
+    alt="form4.62.gif (3813 bytes)"></p>
+
+    <p>The probability <img src="images/sigma.gif" width="9" height="9"
+
+    alt="sigma.gif (280 bytes)"><sub>r</sub>, that exactly r calls
+arrive during a service
+
+    time is given by </p>
+
+    <blockquote>
+
+      <blockquote>
+
+        <blockquote>
+
+          <blockquote>
+
+            <p align="left"><img src="images/sigma.gif" width="9"
+height="9"
+
+            alt="sigma.gif (280 bytes)"><small>r = P{number of new
+arrivals during a service time= r}
+
+            =
+</small>p<small><small><small><sub>R</sub></small></small>(r)</small></p>
+
+          </blockquote>
+
+        </blockquote>
+
+      </blockquote>
+
+    </blockquote>
+
+    <p align="center"><img src="images/form4.63.gif" width="522"
+height="45"
+
+    alt="form4.63.gif (4480 bytes)"></p>
+
+    <p>where, as above, <em>f<sub>s</sub>(s) </em>represents the pdf for
+the service time. For
+
+    any given pdf f,(s), it is then possible to determine the
+probabilities <img
+
+    src="images/sigma.gif" width="9" height="9" alt="sigma.gif (280
+bytes)"><sub>r</sub>. </p>
+
+    <p><strong>Exercise 4.5</strong> How is (4.63) justified? </p>
+
+    <p>Hint: Given that a service lasted exactly a time t, what is
+the&nbsp; probability that
+
+    r new calls arrived during that service time? </p>
+
+    <p>For r = 0, 1, 2,. . . , we have </p>
+
+    <p><img src="images/form4.64.gif" width="581" height="90"
+alt="form4.64.gif (10537 bytes)"></p>
+
+    <p>So (4.64) and (4.65) give the state-transition probabilities for
+successive epochs for
+
+    the M/G/1 system. The state-transition diagram for our M/G/1 system,
+at the epochs is now
+
+    shown in Figure 4.12. A state is defined by </p>
+
+    <p><img src="images/fig4.12.GIF" width="796" height="157"
+alt="fig4.12.GIF (21024 bytes)"></p>
+
+    <p>&quot;the number of calls present at the time when a service is
+completed.&quot; Note
+
+    that the state-transition diagram of Figure 4.12 is no longer of the
+birth-and-death type.
+
+    <br>
+
+    &nbsp;&nbsp;&nbsp; In the analysis that follows, we shall be
+interested only in the
+
+    expected values <img src="images/Lbar.gif" width="11" height="14"
+
+    alt="Lbar.gif (304 bytes)">, <img src="images/Wbar.gif" width="15"
+height="14"
+
+    alt="Wbar.gif (557 bytes)">, <img src="images/Lbar.gif" width="11"
+height="14"
+
+    alt="Lbar.gif (304 bytes)">, and <img src="images/Wbar.gif"
+width="15" height="14"
+
+    alt="Wbar.gif (557 bytes)"><small><sub>q</sub></small>, which can be
+derived without using
+
+    the state-transition diagram. We shall, therefore, ignore Figure
+4.12 from here on. <br>
+
+    &nbsp;&nbsp;&nbsp; Let us define a random variable <img
+src="images/o.gif" width="10"
+
+    height="15" alt="o.gif (933 bytes)"> such that </p>
+
+    <p align="center"><img src="images/form4.66.gif" width="585"
+height="607"
+
+    alt="form4.66.gif (57865 bytes)"></p>
+
+    <p>Note that (4.72) has a very real meaning: from the definition
+of&nbsp; <img
+
+    src="images/o.gif" width="10" height="15" alt="o.gif (933 bytes)">,
+it follows that E[<img
+
+    src="images/o.gif" width="10" height="15" alt="o.gif (933 bytes)">]
+is equal to the
+
+    fraction of epochs, t<em>i</em> at which the queueing system will be
+found empty upon
+
+    completion of a service. It follows that (4.72) cannot be meaningful
+unless <small><small><sup>8</sup></small></small>
+
+    <br>
+
+    <img src="images/rho.gif" width="9" height="12" alt="rho.gif (290
+bytes)"> &lt; 1 (<img
+
+    src="images/lamda.gif" width="8" height="13" alt="lamda.gif (291
+bytes)">&lt; <img
+
+    src="images/mu.gif" width="10" height="11" alt="mu.gif (300
+bytes)">). This is also the
+
+    condition under which steady state exists for M/G/1 systems. </p>
+
+    <p>&nbsp; Let us now square both sides of (4.67) to obtain </p>
+
+    <p align="center"><img src="images/form4.73.gif" width="567"
+height="59"
+
+    alt="form4.73.gif (8267 bytes)"></p>
+
+    <p>where we have used the facts that <img src="images/osquare.gif"
+width="17" height="16"
+
+    alt="osquare.gif (1002 bytes)"> = <img src="images/o.gif" width="10"
+height="15"
+
+    alt="o.gif (933 bytes)"> and that 2N<img src="images/o.gif"
+width="10" height="15"
+
+    alt="o.gif (933 bytes)"> = 0 (both&nbsp; resulting directly from the
+definition of <img
+
+    src="images/o.gif" width="10" height="15" alt="o.gif (933 bytes)">).
+Taking now the
+
+    expected values of both sides of (4.73) and noting that&nbsp; in the
+steady state
+
+    E[(N')^2]1 = E[N^2], we have</p>
+
+    <p align="center"><img src="images/form4.74.gif" width="583"
+height="119"
+
+    alt="form4.74.gif (13054 bytes)"></p>
+
+    <p>We have used the asterisk in (4.74) to indicate that <img
+src="images/Lbar.gif"
+
+    width="11" height="14" alt="Lbar.gif (304 bytes)">* denotes the
+expected number of users
+
+    in the system <em>at the instants that follow the service
+completions</em> on which we
+
+    have concentrated, the epochs. <br>
+
+    &nbsp;&nbsp;&nbsp; It turns out that <img src="images/Lbar.gif"
+width="11" height="14"
+
+    alt="Lbar.gif (304 bytes)">* is equal to <img src="images/Lbar.gif"
+width="11" height="14"
+
+    alt="Lbar.gif (304 bytes)">, the expected number of calls in the
+queueing system that
+
+    would be observed by someone arriving at a random time with the
+system in the steady
+
+    state. To show this, it suffices to show that the steady-state pmf
+for the number in the
+
+    system at the instants of service completion is identical to the
+steady-state pmf for the
+
+    number in the system at any random instant. This we now proceed to
+do in a rather informal
+
+    way. We define </p>
+
+    <p><img src="images/pi.gif" width="9" height="10" alt="pi.gif (60
+bytes)"><small><sub>n</sub></small>
+
+    = steady-state probability that just after the completion of a
+service there are n calls
+
+    left in the queueing system </p>
+
+    <p>P<small><small><sub>n&nbsp; </sub></small></small>= steady-state
+probability that a
+
+    call arriving at the system at a random time will find <em>n</em>
+calls in the queueing
+
+    system </p>
+
+    <p>J<small><sub>n</sub></small> = number of &quot;downward
+jumps&quot; from <em>n + 1</em>
+
+    to<em> n</em> (in the number of&nbsp; calls in the queueing system)
+which are observed
+
+    during a time interval T </p>
+
+    <p>J = <img src="images/siginf.gif" width="23" height="35"
+alt="siginf.gif (1213 bytes)">
+
+    J<small><sub>n</sub></small> = total number of downward jumps in the
+number of calls in
+
+    the queueing system observed during the time interval T </p>
+
+    <p>K<small><small><sub>n</sub></small></small> = number of
+&quot;upward jumps&quot; from n
+
+    to n + 1 (in the number of calls in the queueing system) which are
+observed during the
+
+    time interval T </p>
+
+    <p>K = <img src="images/siginf.gif" width="23" height="35"
+alt="siginf.gif (1213 bytes)">K<small><small><sub>n
+
+    </sub></small></small>= total number of upward jumps in the number
+of calls in the
+
+    queueing system observed during the time interval T </p>
+
+    <p>&nbsp;&nbsp;&nbsp; Obviously, downward jumps are due to service
+completions and upward
+
+    jumps are due to call arrivals. Obviously, too, the quantities
+J<small><small><sub>n</sub></small></small>
+
+    and K<small><small><sub>n</sub></small></small> can differ by at
+most 1 unit during any
+
+    time interval <em>T</em>. <br>
+
+    &nbsp;&nbsp;&nbsp; Assuming that the queueing system does reach
+steady state, we have,
+
+    from the definition of&nbsp; <em><img src="images/pi.gif" width="9"
+height="10"
+
+    alt="pi.gif (60
+bytes)"><small><small><sub>n</sub></small></small></em>, that</p>
+
+    <p align="center"><img src="images/form4.75.gif" width="340"
+height="37"
+
+    alt="form4.75.gif (2526 bytes)"></p>
+
+    <p>Also, since steady state is reached, the number of upward jumps
+must be about the same
+
+    as the number of downward jumps (i.e., the ratio of J to K must go
+to 1 as T goes to
+
+    infinity). From this, plus the fact that
+J<small><small><sub>n</sub></small></small> and
+K<small><small><sub>n</sub></small></small>
+
+    differ at most by one and from (4.75), we then have </p>
+
+    <p align="center"><img src="images/form4.76.gif" width="373"
+height="41"
+
+    alt="form4.76.gif (3319 bytes)"></p>
+
+    <p>&nbsp;&nbsp;&nbsp; The right-hand side above is the steady-state
+probability that the
+
+    system is in state <em>n</em> at the instant of an arrival.
+Arrivals, however, occur in a
+
+    Poisson manner, meaning that the&nbsp; instants of arrivals are
+completely random! Thus,
+
+    lim<sub> <small>t</sub><img src="images/rarrow.gif" width="17"
+height="9"
+
+    alt="rarrow.gif (63 bytes)"><sub><sub><img src="images/infty.gif"
+width="13" height="6"
+
+    alt="infty.gif (58 bytes)"></sub></sub> </small>&nbsp;
+(K<small><small><sub>n</sub></small></small>/K)
+
+    = P<small><small><sub>n</sub></small></small> and we have shown that
+</p>
+
+    <p align="center"><img src="images/form4.77.gif" width="587"
+height="483"
+
+    alt="form4.77.gif (29601 bytes)"></p>
+
+    <p>for the M/G/1 queueing system. These results are valid for
+steady-state conditions
+
+    which exist whenever </p>
+
+    <p align="center"><img src="images/formpg220.gif" width="93"
+height="44"
+
+    alt="formpg220.gif (1538 bytes)"></p>
+
+    <p>&nbsp;&nbsp;&nbsp; Expressions (4.78)-(4.82) are remarkable for
+their simplicity, since
+
+    they apply to any service-time distribution. [In fact, in deriving
+these expressions we
+
+    made no assumptions whatsoever about the specific form of
+<em>f<small><sub>s</sub></small>(s)</em>.]
+
+    They are usually referred to as the &quot;Pollaczek-Khintchine
+formulas.&quot; To use
+
+    them, all that is needed to know about the service time is its
+expected value and its
+
+    variance-which is certainly most convenient in practical
+applications. It is also
+
+    important to note that <img src="images/Lbar.gif" width="11"
+height="14"
+
+    alt="Lbar.gif (304 bytes)"> (as well as <img src="images/Wbar.gif"
+width="15" height="14"
+
+    alt="Wbar.gif (557 bytes)">, <img src="images/Lbar.gif" width="11"
+height="14"
+
+    alt="Lbar.gif (304 bytes)"><small><sub>q</sub></small>, and <img
+src="images/Wbar.gif"
+
+    width="15" height="14" alt="Wbar.gif (557
+bytes)"><small><sub>q</sub></small>) depends on
+
+    the variance of the service times: increasing the consistency of
+service (i.e., reducing
+
+    the variance of service times) improves the performance&nbsp; of the
+service facility. <br>
+
+    &nbsp;&nbsp;&nbsp; Several additional results have been obtained
+with regard to the &nbsp;
+
+    M/G/1 queueing system. For instance, from (4.78) we can conclude
+that the following ratio
+
+    holds: </p>
+
+    <p align="center"><strong><u>E[length of busy period]</u> =
+<u>fraction of time system is
+
+    busy</u> = <u><img src="images/rho.gif" width="9" height="12"
+alt="rho.gif (290 bytes)"></u>/(1-
+
+    <u><img src="images/rho.gif" width="9" height="12" alt="rho.gif (290
+bytes)"></u>)<br>
+
+    &nbsp; E[length of idle period] = fraction of time system is
+idle</strong></p>
+
+    <p>But since E[Iength of idle period] = 1/<img
+src="images/lamda.gif" width="8"
+
+    height="13" alt="lamda.gif (291 bytes)"> (since we have Poisson
+arrivals with rate <img
+
+    src="images/lamda.gif" width="8" height="13" alt="lamda.gif (291
+bytes)">), it can be
+
+    concluded that </p>
+
+    <p align="center"><img src="images/form4.83.gif" width="521"
+height="44"
+
+    alt="form4.83.gif (5931 bytes)"></p>
+
+    <p>Interestingly, (4.83) is identical with (4.43), the expression
+for the expected length
+
+    of the busy period for M/M/1 queueing systems. <br>
+
+    &nbsp;&nbsp;&nbsp; For a given service time pdf,
+<em>f<small><sub>s</sub></small>(s)</em>,
+
+    it is also possible to obtain expressions (or numerical estimates)
+for the steady-state
+
+    probabilities, P<small><sub>n</sub></small>. This is accomplished by
+first obtaining an
+
+    expression for the geometric transform of these probabilities (see,
+for instance, [GROS
+
+    74]). </p>
+
+    <blockquote>
+
+      <p><em><strong>Example 1 (continued)</strong></em> </p>
+
+      <p>To illustrate some of the above, let us take
+X<small><small><sub>O</sub></small></small>
+
+      = 2 miles, Y<small><small><sub>O</sub></small></small> = 1 mile,
+v<small><sub>x</sub></small>,
+
+      30 miles/hr, v<small><sub>y</sub></small>, = 20 miles/hr, <img
+src="images/zbar.gif"
+
+      width="13" height="17" alt="zbar.gif (986 bytes)"> = 10 minutes,
+and <img
+
+      src="images/a2s.gif" width="20" height="18" alt="a2s.gif (1044
+bytes)"> = 25 minutes<small><small><sup>2</sup></small></small>.</p>
+
+      <p><em>Solution </em></p>
+
+      <p>It follows from (4.60) and (4.61) that l/<img
+src="images/mu.gif" width="10"
+
+      height="11" alt="mu.gif (300 bytes)"> = 13.5 minutes and <img
+src="images/a2s.gif"
+
+      width="20" height="18" alt="a2s.gif (1044 bytes)"> = 27.1
+minutes<img
+
+      src="images/square.gif" width="6" height="16" alt="square.gif (861
+bytes)">. Thus, the
+
+      service rate <img src="images/mu.gif" width="10" height="11"
+alt="mu.gif (300 bytes)"> =
+
+      4.44 calls/hr. We can then derive the following table, for
+different demand (call) rates, <img
+
+      src="images/lamda.gif" width="8" height="13" alt="lamda.gif (291
+bytes)">, under
+
+      steady-state conditions: </p>
+
+    </blockquote>
+
+    <p><img src="images/tablepg221.gif" width="585" height="232"
+
+    alt="tablepg221.gif (39990 bytes)"></p>
+
+    <p>&nbsp;</p>
+
+    <blockquote>
+
+      <p><small>&nbsp;&nbsp;&nbsp; </small>The quantities
+P<small><small><sub>O</sub></small></small>,
+
+      <img src="images/Lbar.gif" width="11" height="14" alt="Lbar.gif
+(304 bytes)">, <img
+
+      src="images/Wbar.gif" width="15" height="14" alt="Wbar.gif (557
+bytes)">,<img
+
+      src="images/Lbar.gif" width="11" height="14" alt="Lbar.gif (304
+bytes)"><sub>q</sub> , and
+
+      <img src="images/Wbar.gif" width="15" height="14" alt="Wbar.gif
+(557 bytes)"><sub>q</sub>
+
+      in this table have been computed by using relations (4.78)-(4.82).
+<big><img
+
+      src="images/Wbar.gif" width="15" height="14" alt="Wbar.gif (557
+bytes)"></big><sub>q,<sub>M</sub><big>
+
+      and <img src="images/Wbar.gif" width="15" height="14"
+alt="Wbar.gif (557 bytes)"><sub>q.D</sub>,
+
+      the quantities listed in the two rightmost columns represent&nbsp;
+the average waiting
+
+      time for the corresponding M/M/1 and M/D/1 systems, respectively.
+That is, <img
+
+      src="images/Wbar.gif" width="15" height="14" alt="Wbar.gif (557
+bytes)"><sub>q</sub>,</big><small><sub>M</sub></small><big>
+
+      has been computed for&nbsp; a single-server system with negative
+exponential service time
+
+      distribution and an expected service time, 1/<img
+src="images/mu.gif" width="10"
+
+      height="11" alt="mu.gif (189 bytes)">, of 13.5 minutes; similarly,
+<img
+
+      src="images/Wbar.gif" width="15" height="14" alt="Wbar.gif (557
+bytes)"><sub>q,D </sub>corresponds
+
+      to a constant service time equal W 13.5 minutes. Since an M/M/1
+system can be viewed as
+
+      just a special case of M/G/1, it is hardly surprising that when we
+set <img
+
+      src="images/a2s.gif" width="20" height="18" alt="a2s.gif (1044
+bytes)"> = 1/<img
+
+      src="images/mu.gif" width="10" height="11" alt="mu.gif (189
+bytes)"><img
+
+      src="images/square.gif" width="6" height="16" alt="square.gif (861
+bytes)"> (negative
+
+      exponential service times) in (4.79)-(4.82), the expresssions for
+the corresponding M/M/1
+
+      quantities are obtained. (Try one!) Similarly, the expressions for
+the M/D/1 system can be
+
+      obtained by setting <img src="images/a2s.gif" width="20"
+height="18"
+
+      alt="a2s.gif (1044 bytes)"> = 0 in (4.79)-(4.82). A particularly
+simple and useful
+
+      relationship to remember is that </p>
+
+      <p align="center"><img src="images/form4.84.gif" width="322"
+height="39"
+
+      alt="form4.84.gif (2513 bytes)"></p>
+
+      <p>&nbsp;&nbsp;&nbsp; As one might expect from the fact that <img
+src="images/a2s.gif"
+
+      width="20" height="18" alt="a2s.gif (1044 bytes)"> &lt; 1/<img
+src="images/mu.gif"
+
+      width="10" height="11" alt="mu.gif (189 bytes)"><img
+src="images/square.gif" width="6"
+
+      height="16" alt="square.gif (861 bytes)"> in our example, the
+values of <img
+
+      src="images/Wbar.gif" width="15" height="14" alt="Wbar.gif (557
+bytes)"><sub>q</sub>, for
+
+      all values of <img src="images/lambda.gif" width="10" height="12"
+
+      alt="lambda.gif (179 bytes)"> in the table fall between the
+corresponding values of <img
+
+      src="images/Wbar.gif" width="15" height="14" alt="Wbar.gif (557
+bytes)"><sub>q,m</sub> and
+
+      <img src="images/Wbar.gif" width="15" height="14" alt="Wbar.gif
+(557 bytes)"><sub>q,d</sub>.
+
+      In fact, there is a particularly convenient form for expressions
+(4.79)-(4.82) that brings
+
+      out clearly the significance of the term that includes the
+variance of the service time:
+
+      we can use the coefficient of&nbsp; variation C<sub>s</sub>,(<img
+
+      src="images/deltaequal.gif" width="17" height="18"
+alt="deltaequal.gif (328 bytes)"> <img
+
+      src="images/sigma.gif" width="9" height="9" alt="sigma.gif (182
+bytes)"><sub>s</sub> /
+
+      E[S] = <img src="images/sigma.gif" width="9" height="9"
+alt="sigma.gif (182 bytes)"><sub>s</sub>.
+
+      <img src="images/mu.gif" width="10" height="11" alt="mu.gif (189
+bytes)">) for the service
+
+      time to rewrite, say, (4.79) as </p>
+
+      <p><big>(Remember that for negative exponential service times
+C<sub>s</sub> = 1 and&nbsp;
+
+      for constant service times C<sub>s</sub> = 0.) <br>
+
+      &nbsp;&nbsp;&nbsp; Finally, to conclude the exanple, we might want
+to review the table of
+
+      numerical results to assess the Performance of the ambulance
+service that we have
+
+      described. It is interesting, for instance, that at an arrival
+rate of 1.5 calls/hr, the
+
+      average delay before the ambulance is dispatched to a random call
+for service is about 4
+
+      minute-longer than what it takes for the ambulance, on the
+average, to travel from the
+
+      EMF to the point from which the call has originated and back (=
+3.5 minutes). And this,
+
+      despite the fact that, for <img src="images/lambda.gif" width="10"
+height="12"
+
+      alt="lambda.gif (179 bytes)">= 1.5, the ambulance is busy
+(traveling or at the scene of an
+
+      incident) only about one third of the time. It is thus very likely
+that emergency medical
+
+      service administrators would find the level of service (as
+manifested by the average
+
+      dispatch delay, <img src="images/Wbar.gif" width="15" height="14"
+
+      alt="Wbar.gif (557 bytes)"><sub>q</sub>) provided by this single
+ambulance emergency
+
+      medical system to be unacceptable for&nbsp; call rates greater
+than 1.5 or, at most, 2.0
+
+      calls/hr. <br>
+
+      &nbsp;&nbsp;&nbsp; What to do, then? We might attempt to speed up
+service (reduce 1/<img
+
+      src="images/mu.gif" width="10" height="11" alt="mu.gif (189
+bytes)">) or
+
+      "standardize&quot; the service (reduce <img src=images/sigma.gif>
+      <SUP>2</SUP><SUB>s</SUB>). Suppose that a 20
+percent decrease could be
+
+      achieved for 1/<img src="images/mu.gif" width="10" height="11"
+alt="mu.gif (189 bytes)">&nbsp;
+
+      [i.e., we could achieve 1/<img src="images/mu.gif" width="10"
+height="11"
+
+      alt="mu.gif (189 bytes)">' = (13.5)(0.8) = 10.8 minutes]. Then
+for, say,<img
+
+      src="images/lambda.gif" width="10" height="12" alt="lambda.gif
+(179 bytes)"> = 3.0, we
+
+      would obtain <img src="images/Wbar.gif" width="15" height="14"
+alt="Wbar.gif (557 bytes)"><sub>q</sub>'
+
+      = 7.82 (assuming that <img src="images/a2s.gif" width="20"
+height="18"
+
+      alt="a2s.gif (1044 bytes)"> stays constant at 27. 1). This is a
+better than 50 percent
+
+      reduction in average S dispatch delay!<br>
+
+      &nbsp;&nbsp;&nbsp; Suppose, instead, that we could reduce the
+standard deviation of
+
+      service times by 20 percent [i.e., that we could achieve <img
+src="images/sigma.gif"
+
+      width="9" height="9" alt="sigma.gif (182 bytes)">''<sub>s</sub> =
+(0.8)(27.1)</big><small><sup>1/2</sup></small><big>
+
+      or, in other words (<img src="images/a2s.gif" width="20"
+height="18"
+
+      alt="a2s.gif (1044 bytes)">)&quot; =&nbsp; (0.64)(27.1) = 17.341.
+Then for <img
+
+      src="images/lambda.gif" width="10" height="12" alt="lambda.gif
+(179 bytes)"> = 3.0, and
+
+      assuming that 11p remains constant at 13.5, we would obtain <img
+src="images/Wbar.gif"
+
+      width="15" height="14" alt="Wbar.gif (557 bytes)"><sub>q</sub>'' =
+15.35 minutes or an
+
+      improvement of only about 5 percent over the original <img
+src="images/Wbar.gif"
+
+      width="15" height="14" alt="Wbar.gif (557 bytes)"><sub>q</sub> of
+16.1 minutes. In
+
+      general, reductions in expected service times are usually much
+more effective than
+
+      comparable reductions in the variance of service times. This
+should be obvious from the
+
+      fact that changes in the expected service time, 1/<img
+src="images/mu.gif" width="10"
+
+      height="11" alt="mu.gif (189 bytes)"> affect both the numerator
+and denominator of
+
+      (4.79)-(4.82) by changing the utilization factor, p. <br>
+
+      &nbsp;&nbsp;&nbsp; When it is not possible to reduce 1/<img
+src="images/mu.gif" width="10"
+
+      height="11" alt="mu.gif (189 bytes)"> or <img src="images/a2s.gif"
+width="20" height="18"
+
+      alt="a2s.gif (1044 bytes)"> to achieve improved perfor S mance for
+a given demand rate <img
+
+      src="images/lambda.gif" width="10" height="12" alt="lambda.gif
+(179 bytes)">, one has to
+
+      resort to more drastic measures, such as increasing the number of
+ambulances in our
+
+      present example or reducing the area of responsibility of the EMF
+(and thus <img
+
+      src="images/lambda.gif" width="10" height="12" alt="lambda.gif
+(179 bytes)"> as well).
+
+      With m ambulances at hand (m &gt; 1) that would mean an M/G/m
+queueing system, which we
+
+      proceed to discuss next. A more &quot;complicated&quot; spatially
+distributed M/G/1
+
+      queueing system will be discussed in Section 5.2.</big></p>
+
+    </blockquote>
+
+    <blockquote>
+
+      <blockquote>
+
+        <p><big><SUP>7</SUP> It turns out that this is often the case with some
+important urban emergency
+
+        services, such as police and most emergency repair services.
+This makes possible the
+
+        derivation of many powerful results with respect to these
+services (see Chapter
+
+        5).&nbsp;&nbsp;&nbsp; </big></p>
+
+        <p><big><SUP>8</SUP> It can be shown that steady state is not reached when
+<img src=images/rho.gif> = 1.&nbsp; Expected
+
+        queue lengths and expected waiting times are infinite&nbsp; for
+that value of <img src=images/rho.gif>.</big></sub></p>
+
+      </blockquote>
+
+    </blockquote>
+
+    </td>
+
+  </tr>
+
+</table>
+
+
+
+<hr>
+
+
+
+<p><a href="4.8.html"><img src="images/next.gif" valign="top"
+align="right" width="37"
+
+height="24"></a> <a href="contents4.html"><img src="images/contents.gif"
+valign="top"
+
+align="right" width="65" height="24"></a> <a href="4.6.5.html"><img
+
+src="images/previous.gif" valign="top" align="right" width="63"
+height="24"></a> </p>
+
+</body>
+
+</html>
+

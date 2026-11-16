@@ -1,0 +1,36 @@
+[
+  {
+    "file": "01_virtamo_mg1.pdf",
+    "url": "https://ecs.syr.edu/faculty/fawcett/handouts/CSE681summer/Lecture10/queueNotes/E_lect11.pdf",
+    "final_url": "https://ecs.syr.edu/faculty/fawcett/handouts/CSE681summer/Lecture10/queueNotes/E_lect11.pdf",
+    "bytes": 247047,
+    "status": "ok"
+  },
+  {
+    "file": "02_larson_odoni_mg1.html",
+    "url": "https://web.mit.edu/course/other/urban_or_book/OldFiles/www/book/chapter4/4.7.html",
+    "final_url": "https://web.mit.edu/course/other/urban_or_book/OldFiles/www/book/chapter4/4.7.html",
+    "bytes": 34454,
+    "status": "ok"
+  },
+  {
+    "file": "03_stanford_pollaczek_khinchine.pdf",
+    "url": "https://web.stanford.edu/class/ee384x/EE384X/handouts/H10.pdf",
+    "final_url": "https://web.stanford.edu/class/ee384x/EE384X/handouts/H10.pdf",
+    "bytes": 129461,
+    "status": "ok"
+  },
+  {
+    "file": "04_nicol_analisis_salidas.pdf",
+    "url": "https://dmnicol.web.engr.illinois.edu/ece541/slides/output-analysis.pdf",
+    "final_url": "https://dmnicol.web.engr.illinois.edu/ece541/slides/output-analysis.pdf",
+    "bytes": 2658943,
+    "status": "ok"
+  },
+  {
+    "file": "05_currie_cheng_analisis_simulacion_2013.pdf",
+    "url": "https://simulation.tudelft.nl/SEN9110/termpapers/output/CurrieCheng_WSC2013_A%20Practical%20Introduction%20to%20Analysis%20of%20Simulation%20Output%20Data.pdf",
+    "status": "failed",
+    "error": "HTTP Error 404: Not Found"
+  }
+]

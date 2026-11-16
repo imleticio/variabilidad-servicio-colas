@@ -1,0 +1,621 @@
+The effect of service time variability on maximum queue lengths
+                        in M X /G/1 queues
+
+                   Ger Koole ∗              Misja Nuyens ∗             Rhonda Righter †
+
+
+                                               April 29, 2005
+
+
+
+
+                                                   Abstract
+
+          We study the impact of service-time distributions on the distribution of the maximum
+       queue length during a busy period for the M X /G/1 queue. The maximum queue length is
+       an important random variable to understand when designing the buffer size for finite buffer
+       (M /G/1/n) systems. We show the somewhat surprising result that for three variations of
+       the preemptive LCFS discipline, the maximum queue length during a busy period is smaller
+       when service times are more variable (in the convex sense).
+
+
+
+AMS Subject Classification: Primary 60K25, Secondary 90B22.
+
+Keywords: maximum queue length, busy period, service disciplines, LCFS, variability, stochas-
+tic orderings, buffer overflow
+
+
+
+
+   ∗
+    Department of Mathematics, Vrije Universiteit Amsterdam, De Boelelaan 1081a, 1081 HV Amsterdam, The
+Netherlands, koole@few.vu.nl and mnuyens@few.vu.nl
+  †
+    Department of Industrial Engineering and Operations Research, University of California, Berkeley, California,
+USA, rrighter@ieor.berkeley.edu
+
+
+                                                       1
+1    Introduction
+
+An important design issue for telecommunication systems and other applications is determining
+the buffer size when buffers are finite. We can better understand the effect of a particular buffer
+size by understanding the distribution of the maximum queue length during a busy period
+in an infinite buffer system. We give a characterization of the busy-period maximum queue
+length, M , for the M X /G/1 queue for three types of preemptive LCFS (last-come first-served)
+disciplines: (i) preempted services are resumed when service recommences (LCFS-p-resume),
+(ii) preempted services must be restarted from scratch when service recommences and a new
+service time is chosen from the service-time distribution (LCFS-p-repeat with resampling), and
+(iii) preempted services must be restarted from scratch when service recommences but the total
+service requirement for a given customer is the same each time it restarts its service (LCFS-p-
+repeat-without-resampling). These characterizations of M for each of the queueing disciplines
+allow us to show the effect of service-time distributions on M, as stated in (i)-(iii) below. For
+a fixed service discipline, let M and M 0 be the maximum number of customers during a busy
+period in two M X /G/1 queues with respective generic service times S and S 0 , and with the
+same arrival rate λ, and the same batch-size distribution. We assume that the distributions of
+S and S 0 are such that the queues are stable. In this paper we show that the following relations
+hold; the definitions of the various stochastic orders can be found in the next section.
+
+
+(i) Under the LCFS-p-resume discipline, if S 0 ≤LT S, then M 0 ≤st M .
+                                                                             0
+(ii) Under the LCFS-p-repeat (with resampling) discipline, if E(e −λS ) ≥ E(e−λS ), then
+      M 0 ≤st M .
+
+(iii) Under the LCFS-p-repeat-without-resampling discipline, if S 0 ≤icv S, then M 0 ≤st M .
+
+
+    A consequence of our results is the somewhat surprising conclusion that M will be stochas-
+tically smaller when service times are more variable (in the convex sense) under the preemptive
+LCFS disciplines. Miyazawa (1990) and Miyazawa and Shanthikumar (1991) show that for the
+finite-buffer M X /G/1/n queue under a non-preemptive discipline, the loss rate, i.e., the proba-
+bility that a random customer is lost, will be larger when service times are more variable in the
+convex sense. Our result relates to the loss rate, but the effect goes in the other direction. That
+is, we have that for preemptive LCFS disciplines, P (M > n) is smaller when service times are
+larger in the convex sense, where P (M > n) can be interpreted as the probability of at least
+one loss during a busy period in the M X /G/1/n queue. See also Chang, Chao, Pinedo, and
+Shanthikumar (1991).
+
+
+
+                                                2
+    For other results on the impact of the service time and batch size distributions on various
+performance measures of queueing systems, see, for example, Hordijk (2001), Makowski (1994),
+and Shanthikumar and Yao (1994), and the references therein. For other applications of the
+preempt-repeat service discipline, see, e.g., Adiri, Frostig, and Rinnooy Kan (1991), Birge,
+Frenk, Mittenthal, and Rinnooy Kan (1990), Cai, Sun, and Zhou (2004), and Cai, Wu, and
+Zhou (2004).
+
+    The paper is organized as follows. We first recall some definitions of stochastic ordering in
+the next section. We then study M for each of the preemptive LCFS disciplines. Finally we
+provide some numerical illustrations of our results.
+
+
+2    Preliminaries
+
+Recall the following stochastic ordering relations for random variables X and Y .
+
+
+Definition 2.1 X is larger than Y in the stochastic sense, X ≥ st Y , if Eφ(X) ≥ Eφ(Y ) for
+all increasing functions φ for which the expectations exist.
+
+
+    Equivalently, X ≥st Y if and only if P (X > t) ≥ P (Y > t) for all t.
+
+
+Definition 2.2 X is larger than Y in the convex sense, X ≥ cx Y , if Eφ(X) ≥ Eφ(Y ) for all
+convex functions φ for which the expectations exist.
+
+
+    Note that X ≥cx Y implies EX = EY and V ar(X) ≥ V ar(Y ). In this sense the convex
+ordering is an ordering of variability in random variables.
+
+
+Definition 2.3 X is larger than Y in the increasing concave sense, X ≥ icv Y , if Eφ(X) ≥
+Eφ(Y ) for all increasing concave functions φ for which the expectations exist.
+
+
+Definition 2.4 X is larger than Y in the Laplace-transform sense, X ≥ LT Y , if E[e−θX ] ≤
+E[e−θY ] for all θ > 0 for which the expectations exist.
+
+
+    Note that X ≥cx Y implies X ≤icv Y , which in turn implies X ≤LT Y .
+
+
+   Finally, for reasons of brevity we use the following notation. When we say X = [ Y | Z = z ],
+we mean that P (X = x) = P (Y = x | Z = z) for all x.
+
+                                                3
+3     Preemptive LCFS disciplines
+
+3.1   LCFS preempt-resume
+
+We first consider the M X /G/1 queue with the LCFS preempt-resume (LCFS-p-resume) disci-
+pline. That is, the customer that has been in the system the least amount of time is always
+served, and newly arriving customers preempt earlier arrivals already in service. Within a batch
+customers are arbitrarily labeled, so that we may think of them as arriving sequentially, though
+immediately after each other. Thus, one customer in a newly arriving batch will be considered
+the most recent arrival and will immediately enter service, and the rest of the batch cannot be
+served until that customer, as well as all customers arriving in later batches that preempt that
+customer, are served.
+
+     Customers who resume service after being preempted start their service where they left
+off. Hence, a random service with service time S that is preempted when t units of service
+have already been received has remaining service time [S − t|S > t]. We also assume service is
+non-idling. Let T be a generic interarrival time, where T has an exponential distribution with
+rate λ, and let X be a generic batch size with arbitrary distribution and mean µ. We assume
+that the queue is stable, λµES < 1.
+
+     Let customer 0 be the last customer in the first batch in the busy period, i.e., the first
+customer to enter service, and let S 0 be the service time of customer 0. Let N = N (S 0 ) be
+the number of Poisson batch arrival times that occur during the service of customer 0, and let
+N (s) = [N (S0 )|S0 = s]. Note that the service will be interrupted if N (S 0 ) > 0. Let X0 be
+the number of customers in the first batch of the busy period and define M (k, n) = [M |X 0 =
+k, N = n] and M (k) = [M |X0 = k], so that M (X0 , N ) = M = M (X0 ). Let Mi , i = 1, 2, . . ., be
+i.i.d. copies of M , and define maxi=1,...,n Mi to be 0 if n = 0. For the LCFS-p-resume discipline
+we then have the following characterization of M (k, n).
+
+
+Lemma 3.1 The maximum queue length M (k, n) for the M X /G/1 queue under the LCFS-p-
+resume discipline satisfies
+
+                M (k, n) =d max{ max Mi + k; M (k − 1)},           k ≥ 1, n ≥ 0,              (1)
+                                   i=1,...,n
+
+
+where M (0) = 0, and Mi , i = 1, 2, . . ., and M (k − 1) are independent.
+
+
+    Proof. We can think of constructing the busy period, conditional on X 0 = k, S0 = s and
+N (s) = n, as follows. Denote the arrival epochs, on a clock that only ticks when customer 0 is
+being served, by 0 < t1 < · · · < tn < s. A batch of customers arrives at time t 1 and starts a
+
+
+                                                4
+new independent busy period (and stops our clock temporarily), except that there are k more
+customers in the queue (the original customers) throughout that busy period. When this first
+sub-busy period is over, at time t1 + τ say, then customer 0 returns to service and our clock
+resumes ticking. Another batch arrives at time t 2 + τ , starting a new independent busy period,
+and so on, until the n sub-busy periods have completed, as well as the original service time s.
+Then a new busy period starts with the other k − 1 customers that arrived in the first batch,
+and the maximum queue length during that busy period has the same distribution as M (k − 1).
+Because the arrival process is memoryless, this construction is stochastically equivalent to the
+dynamics of a generic M X /G/1 busy period starting with k customers.                             
+
+    Let P (k, b) = P (M (k) ≤ b), and P (b) = P (M ≤ b) = EP (X 0 , b). So P (0, b) = 1 and
+P (0) = 0. Using the fact that E[P (b − k) N ] is the z-transform, or probability generating
+function of N evaluated at z = P (b − k), we have from Lemma 3.1 that for 1 ≤ k ≤ b,
+
+                           P (k, b) = E[P (M + k ≤ b)N ]P (k − 1, b)
+                                    = E[P (b − k)N ]P (k − 1, b)
+                                    = Ee−λ(1−P (b−k))S P (k − 1, b).
+
+Corollary 3.2 For b ≥ k ≥ 1,
+
+                                               Y
+                                               k
+                                  P (k, b) =         Ee−λ(1−P (b−i))S .
+                                               i=1
+
+
+     If we restrict ourselves to unit batch sizes only, so X ≡ 1 and P (b) = P (1, b), we have the
+following corollary.
+
+Corollary 3.3 If X ≡ 1, then for b ≥ 1,
+
+                                     P (b) = Ee−λ(1−P (b−1))S .
+
+    Now we can see how the distribution of S affects M .
+
+Theorem 3.4 For M X /G/1 queues operating under the LCFS-p-resume discipline, if S 0 ≤LT
+S, then M 0 ≤st M . In particular, if S 0 ≥cx S, then M 0 ≤st M .
+
+    Proof. To show that M 0 ≤st M , we show that P (k, b) ≤ P 0 (k, b) (with the obvious definition
+for P 0 ) for all k and b by induction on b and k. For each b we have P (0, b) = 1 = P 0 (0, b), and
+P (k, 1) = 0 = P 0 (k, 1) for k > 1. Since S 0 ≤LT S,
+                                                                     0
+                       P (1, 1) = P (S < T ) = Ee−λS ≤ Ee−λS = P 0 (1, 1).
+
+                                                      5
+Suppose P (i, a) ≤ P 0 (i, a) for a < b and all i ≥ 0, so P (a) ≤ P 0 (a) for all a < b, and suppose
+P (i, b) ≤ P 0 (i, b) for all 0 ≤ i < k, and consider b and k. From Corollary 3.2, the induction
+hypothesis, and the assumption S 0 ≤LT S, it then follows that
+
+                                   Y
+                                   k                           Y
+                                                               k
+                                                                              0
+                     P (k, b) =          Ee−λ(1−P (b−i))S ≤          Ee−λ(1−P (b−i))S
+                                   i=1                         i=1
+
+                                   Y
+                                   k
+                                                   0       0
+                              ≤          Ee−λ(1−P (b−i))S = P 0 (k, b).
+                                   i=1
+
+This completes the proof.                                                                          
+
+This theorem is illustrated by Figures 1, 2 and 3 below, showing the probabilities P (M ≤ n)
+for (convexly ordered) families of uniform, Pareto and hyperexponential distributions.
+
+
+     Remark It is well known (Kelly, 1979) that the M /G/1 queue under the LCFS-p-resume
+discipline exhibits service time insensitivity in the sense that the marginal distribution of the
+number in the stationary system, L, depends on the service-time distribution only through its
+mean. At first this seems at odds with our results, but we must bear in mind that the maximum
+number in the system during a busy period depends on the sample-path evolution of the queue
+length over a busy period. Hence the behaviour of M and L may be very different. This idea
+is further illustrated by the following heuristic example.
+
+
+     Example Let M be the maximum number in system for an M /G/1 LCFS-p-resume
+queue with S ≡ 1 (call this system 1) and let M 0 be the corresponding maximum when the
+first service time in a busy period, S 0 , is equally likely to be ε or 2 − ε so S ≤ cx S 0 , and the
+other service times in the busy period are identically equal to 1 (call this system 2). Then, for
+ε very small, the first busy period in system 2 is equally likely to be very short and have a
+maximum of 1, or it will essentially consist of two busy periods, each evolving as a busy-period
+in system 1. The second of these busy periods starts when the initial customer has received
+1 − ε/2 service. That is, roughly, M 0 is equally likely to be 1 or to have the same distribution as
+max{M1 , M2 }, so M 0 6=st M . Note however that L and L0 have roughly the same distribution.
+Indeed, P (L = 0) = P (L0 = 0), since the workload is the same in both systems. Furthermore,
+a random arrival during a busy period in system 2 will either see a customer with S 0 = ε in
+service, with very small probability, or will arrive during one of the two busy periods that each
+evolve as in system 1. Hence L0 and L have roughly the same distribution. Finally note that
+the distribution of the length of a busy period does depend on the distribution of S.              
+
+    The M X /G/1/b LCFS-p-resume queue also exhibits insensitivity, i.e., the distribution of
+the number in system, Lb , depends on the distribution of S only through its mean. Hence, the
+
+                                                       6
+loss rate in the M X /G/1/b queue, P (Lb = b), is insensitive to the distribution of S. In contrast,
+our result shows that the probability of at least one loss during a busy period, P (M > b), does
+depend on the distribution of S, and is greater when S is larger in the Laplace-transform sense.
+
+
+3.2   LCFS preempt-repeat with resampling
+
+Now we suppose that when services are preempted they must be restarted from scratch. The
+new service time is assumed to be an independent random variable with the same distribution.
+We call this the LCFS-p-repeat (with resampling) discipline. Of course, the behavior of the
+queue under the LCFS-p-resume and LCFS-p-repeat disciplines is the same when service times
+are exponential.
+
+    We use the same notation as in the previous subsection. Now, for stability, we need
+λµESe (S) < 1 and λµESe (S 0 ) < 1, where Se (S) is the effective service time, i.e., the total
+time a random customer must spend in service, including restarts due to interruptions. Thus,
+
+                            ESe (S) = E(S ∧ T ) + P (S > T )ESe (S),
+
+where a ∧ b = min{a, b}, and hence
+
+                                                  E(S ∧ T )
+                                      ESe (S) =              .                                   (2)
+                                                  P (S ≤ T )
+
+For T exponential with rate λ, it is not hard to show that
+
+                                               1 − E(e−λS )
+                                       ESe =                                                     (3)
+                                                λE(e−λS )
+
+and hence for stability we need E(e−λS ) > µ/(µ + 1).
+
+    For the M X /G/1 LCFS-p-repeat queue, we can identify the following embedded random
+walk. The number in the system at arrival and departure epochs during a busy period is
+equivalent to a random walk on the nonnegative integers with absorbing state 0. The random
+walk starts at the random point X0 , decreases by 1 if T > S (a departure), and increases if
+T < S (an arrival). When it increases, it increases by X, where X is independent of S and T .
+Thus, we have the following characterization of M , where I = 1 if T < S and 0 otherwise, and
+other definitions are as in previous sections.
+
+
+Lemma 3.5 The maximum queue length M (k) for the M X /G/1 queue under the LCFS-p-
+repeat discipline satisfies
+
+                       M (k) =d IM (k + X) + (1 − I) max{k, M (k − 1)},
+
+                                                  7
+where M (0) = 0, and I, X, and M (k − 1) are mutually independent, and M (k + X) is inde-
+pendent of I and M (k − 1).
+
+
+     Let I 0 be 1 if T > S 0 , and 0 otherwise. If P (T > S 0 ) ≥ P (T > S), then I 0 ≥st I. From
+Lemma 3.5 and a coupling argument it then follows that M 0 ≤st M . Therefore, we have the
+following.
+
+                                                                                               0
+Theorem 3.6 For M X /G/1 queues operating under the LCFS-p-repeat discipline, if E(e −λS ) ≥
+E(e−λS ), then M 0 ≤st M .
+
+
+    Note that for the LCFS-p-repeat discipline, we only need for the Laplace transform of the
+service time evaluated at (the arrival rate) λ to be ordered for two service-time distributions,
+rather than a complete Laplace-transform ordering. Thus, all possible distributions of service
+times can be completely ordered, and hence we have a complete stochastic ordering of the
+corresponding maximum queue lengths. Of course, it is also true that S 0 ≥cv S implies S 0 ≤LT
+                                    0
+S, which in its turn implies E(e−λS ) ≥ E(e−λS ).
+
+
+3.3   LCFS preemptive repeat without resampling
+
+For our final model, we suppose again that when services are preempted they must be restarted
+from scratch, but now the service time is only drawn from the service-time distribution once.
+We call this the LCFS-p-repeat-without-resampling discipline. Note that the LCFS-p-repeat
+and LCFS-p-repeat-without-resampling disciplines are the same for deterministic service times.
+For stability, we need again λµESe (S) < 1 and λµESe (S 0 ) < 1, where Se (S) is the effective
+service time. Given S = s, the service time is deterministic and the effective service time S e is
+the same as in equation (2), that is
+
+                                         E(s ∧ T )    1 − e−λs  1
+                     E[Se (S)|S = s] =              =     −λs
+                                                               = [eλs − 1].
+                                         P (s ≤ T )    λe       λ
+
+Hence,
+                                                             1
+                       ESe = ESs (S) = E(E[Se (S) | S ]) =     [EeλS − 1].
+                                                             λ
+So for stability we need E(eλS ) < (µ + 1)/µ. If, for example, S is exponentially distributed
+with mean ν, then for stability we need ν > λ(µ + 1). Note that this value is larger than for
+the repeat-with-resampling discipline. Intuitively, a large value of the service time has a large
+probability of being interrupted and having to start over, and each time it restarts it will again
+have a large service time.
+
+                                                8
+    With X0 , S0 , and M defined as in the last subsection, and with T 1 defined to be the first
+interarrival time after the busy period starts, we now let M (k, s) = [M |X 0 = k, S0 = s] and
+M (k) = M (k, S) = [M |X0 = k]. Let I(s) = 1 if T1 < s and 0 otherwise. We have the following.
+
+
+Lemma 3.7 The maximum queue length M (k, s) for the M X /G/1 queue under the LCFS-p-
+repeat-without-resampling discipline satisfies
+
+             M (k, s) =d I(s) max{M + k; M (k, s)} + (1 − I(s)) max{k, M (k − 1)},
+
+where M (0) = 0, and where I(s), M , M (k, s), and M (k − 1) are independent.
+
+    Proof. Given X0 = k and S0 = s, if an arrival occurs before the first service completion a
+new i.i.d. (sub-)busy period starts, except that there are k additional customers in the queue.
+When that sub-busy period ends, the original busy periods starts again,independently of T 1 and
+of M for the ending sub-busy period, with X 0 = k and S0 = s. If the first service completes
+before an arrival, then we may consider the remainder of the busy period as a new, independent
+busy period with k − 1 initial customers.                                                     
+
+    Let P (k, b, s) = P (M (k, s) ≤ b), P (k, b) = P (M (k) ≤ b) = EP (k, b, S 0 ), and P (b) =
+P (M < b) = EP (X0 , b, S0 ). We have the following corollary to Lemma 3.7.
+
+Corollary 3.8 For b ≥ k ≥ 1 and for all s,
+
+                                  P (T > s)P (k − 1, b)       e−λs P (k − 1, b)
+                 P (k, b, s) =                          =                          .
+                                 1 − P (T < s)P (b − k)   1 − (1 − e−λs )P (b − k)
+
+    Using this corollary, we can show the following.
+
+
+Theorem 3.9 For M X /G/1 queues operating under the LCFS-p-repeat-without-resampling
+discipline, if S 0 ≤icv S, then M 0 ≤st M . Hence, if S 0 ≥cx S, then M 0 ≤st M .
+
+    Proof. ¿From our corollary above, for b ≥ k ≥ 1, and s ≥ 0,
+
+                                                     P (k − 1, b)
+                            P (k, b, s) =                                     .
+                                            eλs (1 − P (b − k)) + P (b − k)
+
+It is easy to show that f (s) := a/(ceλs +d) is a decreasing convex function of s for all a, c, d ≥ 0,
+c + d > 0 (so −f (s) is increasing and concave). Hence, if S 0 ≤icv S then −Ef (S 0 ) ≤ −Ef (S)
+and Ef (S 0 ) ≥ Ef (S). Also note that P (k, b, s) is increasing in P (k − 1, b) and P (b − k) for
+fixed s. The result now follows using an induction argument similar to the one in the proof of
+Theorem 3.4.                                                                                        
+
+                                                    9
+4    Numerical illustrations
+
+For the LCFS preempt-resume discipline, we calculated P (M ≤ n) using Corollay 3.3. The
+figures below show the results for several convexly ordered families of distributions, illustrating
+Theorem 3.4.
+
+                                                                uniform(0.9,1.1)
+                                                                    uniform(0,2)
+                        1
+
+
+
+
+                       0.8
+
+
+
+
+                       0.6
+
+
+
+
+                       0.4
+
+
+
+
+                       0.2
+
+
+
+
+                        0
+                             0        5           10           15                  20
+
+
+
+
+Figure 1: P (M ≤ n), n = 1, 2, . . . , 20, for uniform service-time distributions with ES = 1;
+λ = 0.9.
+
+                       1.2
+                                                                    Pareto(1.5)
+                                                                     Pareto(2)
+                                                                    Pareto(10)
+
+
+                        1
+
+
+
+
+                       0.8
+
+
+
+
+                       0.6
+
+
+
+
+                       0.4
+
+
+
+
+                       0.2
+                             0        5           10           15                  20
+
+
+
+
+Figure 2: P (M ≤ n), n = 1, 2, . . . , 20, for Pareto(α) service-time distributions with distribution
+function Fα (x) = 1 − ((α − 1)/(αx))α , x ≥ (α − 1)/α, so ES = 1; λ = 0.95.
+
+
+
+
+                                                 10
+                      1.2
+                                                               hyperexponential(1)
+                                                               hyperexponential(3)
+                                                              hyperexponential(10)
+                      1.1
+
+
+
+                       1
+
+
+
+                      0.9
+
+
+
+                      0.8
+
+
+
+                      0.7
+
+
+
+                      0.6
+
+
+
+                      0.5
+
+
+
+                      0.4
+                            0     2         4         6                8             10
+
+
+
+
+Figure 3: P (M ≤ n), n = 1, 2, . . . , 10, for hyperexponential(k) service-time distributions with
+P (S = X1 ) = 1 − 2−k = 1 − P (S = X2 ), where X1 and X2 are exponentially distributed with
+mean 1/(2(1 − 2−k )) and 2k /2 respectively, so ES = 1; λ = 0.95.
+
+
+5    Other queueing disciplines
+
+We were unable to obtain results for other queueuing disciplines, though we make the following
+conjectures. By FB (also known as LAS or LAST for least attained service time first) we
+mean the discipline that always serves the customer that has so far received the least amount
+of service. Thus, like the LCFS preemptive disciplines, new arrivals immediately preempt
+customers in service, but once a new arrival attains as much service as other customers, the
+multiple customers with the least attained service are served in a processor sharing fashion.
+Note that for nonpreemptive disciplines, like FCFS and (nonpreemptive) LCFS, the number in
+system, and hence the maximum queue length in a busy period, is independent of the particular
+discipline.
+
+
+(i) Under the FB discipline, if S 0 ≥cx S, then M 0 ≤st M .
+
+(ii) Under nonpreemptive service disciplines, if S 0 ≥icx S, then M 0 ≥icx M .
+
+
+    Our second conjecture is contrary to the results for preemptive LCFS disciplines in this
+paper, in the sense that when service times become more variable, performance for nonpreemp-
+tive disciplines as measured by the maximum queue length deteriorates. This contrast may
+be explained as follows: when service times are highly variable, the preemptive LCFS disci-
+plines and FB permit customers with shorter services to be served first, which can improve
+
+                                                11
+performance relative to nonpreemptive disciplines. Further, the effect of a larger variability
+on nonpreemptive systems is consistent with our intuition and results for other performance
+measures like the mean waiting time.
+
+
+Acknowledgements We would like to thank the referee for a careful review and excellent
+suggestions.
+
+
+References
+
+ [1] Adiri, I., Frostig. E., and Rinnooy Kan, A.H.G. 1991. Scheduling on a single
+     machine with a single breakdown to minimize stochastically the number of tardy jobs.
+     Nav. Res. Log. 38, 261-271.
+
+ [2] Cai, X., Sun, X.Q. and Zhou, X. 2004. Stochastic scheduling subject to machine
+     breakdowns: The preemptive-repeat model with discounted reward and other criteria.
+     Nav. Res. Log., 51, 800-817.
+
+ [3] Cai, X., Wu, X. and Zhou, X. Dynamically Optimal Policies for Stochastic Scheduling
+     Subject to Preemptive-Repeat Machine Breakdowns. IEEE Trans. on Automation Sci. and
+     Eng., to appear.
+
+ [4] Chang, C.-S., Chao, X., Pinedo, M. and Shanthikumar, J. G. 1991. Stochastic
+     convexity for multidimensional processes and its applications. IEEE Trans. on Aut. Cont.
+     36, 1347-1355.
+
+ [5] Frenk, A.J.B.G., Mittenthal, A.J., and Rinnooy Kan, A.H.G. 1990. Single-
+     machine scheduling subject to stochastic breakdowns Nav. Res. Log. 37, 661-677
+
+ [6] Hordijk, A. 2001. Comparison of queues with different discrete-time arrival processes.
+     Prob. in the Eng. and Inf. Sci. 15, 1-14.
+
+ [7] Kelly, F. P. 1979. Reversibility and Stochastic Networks. Wiley, New York.
+
+ [8] Makowski, A. M. 1994. On an elementary characterization of the increasing convex
+     ordering, with an application. J. Appl. Prob. 31, 834-840.
+
+ [9] Miyazawa, M. 1990. Complementary generating functions for M X /GI/1/k and
+    GI/M Y /1/k queues and their applications to the comparison of loss probabilities. J. Appl.
+    Prob. 27, 684-692.
+
+[10] Miyazawa, M. and Shanthikumar, J. G. 1991. Prob. Eng. Inf. Sci. 5, 43-52.
+
+
+                                              12
+[11] Shaked, M. and Shanthikumar, J. G. 1994. Stochastic Orders and Their Applications.
+     Academic Press, New York.
+
+[12] Shanthikumar, J. G. and Yao, D. D. 1994. Stochastic comparisons in closed Jackson
+     networks. (Chapter 14, 433-460) In Stochastic Orders and Their Applications. M. Shaked
+     and J. G. Shanthikumar, eds. Academic Press, New York.
+
+
+
+
+                                            13
+

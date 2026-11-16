@@ -1,0 +1,33 @@
+% !TeX root = ../main.tex
+
+\section{Introducción}
+\label{sec:introduccion}
+
+\subsection{Contexto y relevancia del problema}
+\label{subsec:contexto}
+
+Los sistemas de colas permiten estudiar situaciones en las que personas, solicitudes o trabajos requieren la atención de recursos con capacidad limitada. Estas situaciones aparecen tanto en servicios de atención al público como en sistemas informáticos y redes de comunicaciones. Aunque sus componentes físicos son diferentes, comparten una misma estructura: las solicitudes llegan, esperan cuando el recurso está ocupado, reciben servicio y abandonan el sistema. La teoría de colas proporciona herramientas para analizar esta estructura y relacionar las características de la demanda y del servicio con indicadores de desempeño, como la cantidad de solicitudes acumuladas y los tiempos de espera \cite{lauberbonomo2021resetting}.
+
+Una primera aproximación al desempeño de estos sistemas consiste en comparar la tasa de llegada con la capacidad media de atención. Sin embargo, esta comparación no describe por sí sola la experiencia de quienes esperan. En una cola con un servidor, la espera también depende de cómo se distribuyen las duraciones de los servicios. Para el modelo M/G/1 con atención por orden de llegada, la fórmula de Pollaczek--Khinchine permite expresar la espera media en función de la tasa de llegada y de los dos primeros momentos del tiempo de servicio. Por lo tanto, además de su media, resulta relevante su variabilidad \cite{virtamoMG1}.
+
+\subsection{Planteamiento y justificación}
+\label{subsec:planteamiento}
+
+El problema abordado en esta monografía surge de una limitación de los análisis basados exclusivamente en promedios: dos sistemas pueden tener la misma tasa de llegada y el mismo tiempo medio de atención, pero producir tiempos medios de espera diferentes. En uno de ellos, las duraciones de los servicios pueden ser relativamente uniformes; en el otro, pueden alternarse atenciones breves y prolongadas. Bajo los supuestos del modelo M/G/1 y manteniendo constantes las demás condiciones, una mayor varianza del tiempo de servicio implica una mayor espera media en cola \cite{virtamoMG1}. Esta relación muestra que una descripción de la capacidad basada únicamente en el promedio puede ocultar diferencias relevantes de funcionamiento.
+
+Estudiar esta relación permite integrar contenidos de probabilidad, generación de variables aleatorias, sistemas de colas y simulación de eventos discretos. Asimismo, ofrece una oportunidad para comparar predicciones analíticas con una demostración computacional acotada. En este contexto, la simulación no se plantea como sustituto de una solución teórica disponible, sino como un recurso para representar la evolución del sistema e ilustrar el efecto de modificar la distribución de los tiempos de servicio. El interés del trabajo reside en comprender y explicar un resultado establecido, así como sus condiciones de aplicación, y no en proponer una relación teórica nueva.
+
+A partir de este planteamiento, se formula la siguiente pregunta de investigación:
+
+\begin{quote}
+\emph{¿Cómo afecta la variabilidad de los tiempos de servicio al tiempo medio de espera cuando se mantienen constantes la tasa de llegada y el tiempo medio de atención?}
+\end{quote}
+
+\subsection{Alcance y enfoque del trabajo}
+\label{subsec:alcance}
+
+El análisis se delimita a sistemas con un único servidor, llegadas que siguen un proceso de Poisson de tasa constante y atención según el orden de llegada, conocida como FCFS por la expresión inglesa \emph{first-come, first-served}. Se consideran tiempos de servicio independientes e idénticamente distribuidos, independientes del proceso de llegadas, y una capacidad de espera ilimitada. No se incorporan prioridades, abandonos, rechazos, interrupciones del servicio ni variaciones de la capacidad de atención. Estas simplificaciones permiten concentrar la comparación en la variabilidad del servicio sin introducir simultáneamente otros mecanismos que puedan modificar las esperas.
+
+Dentro de este alcance, se estudia el modelo M/G/1 y se utilizan M/D/1 y M/M/1 como casos particulares, correspondientes a tiempos de servicio constantes y exponenciales, respectivamente \cite{virtamoMG1}. La comparación mantiene fija la tasa de llegada y la media de servicio. Se trabaja bajo condiciones de estabilidad, con una utilización del servidor menor que uno, y con un segundo momento del tiempo de servicio finito, de modo que resulte aplicable el análisis de la espera media. El indicador principal es el tiempo de espera en cola, es decir, el período transcurrido desde la llegada de una solicitud hasta el inicio de su atención; se distingue del tiempo total de permanencia, que incluye también el servicio.
+
+La monografía adopta un enfoque de revisión bibliográfica y análisis comparativo, complementado con una demostración mediante simulación de eventos discretos cuyo diseño se precisará en la metodología. La revisión permite fundamentar los modelos y discutir sus supuestos; la demostración se orienta a ilustrar la relación estudiada mediante parámetros hipotéticos explícitos. Por este motivo, no se pretende validar un servicio real ni formular recomendaciones operativas para una organización particular. Las conclusiones se limitarán a la evidencia analizada y a las condiciones del modelo, evitando extender el resultado a cualquier disciplina de atención o a cualquier medida de desempeño.

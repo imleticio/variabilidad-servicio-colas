@@ -1,0 +1,59 @@
+% !TeX program = pdflatex
+% Documento principal. Compilar desde monografia/ con latexmk -pdf main.tex
+% (o mediante LaTeX Workshop). Las referencias utilizan BibTeX.
+% No se ha compilado este archivo: la generación de PDF queda a cargo
+% del usuario hasta que autorice expresamente al agente a realizarla.
+
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{tikz}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+
+\begin{document}
+
+\begin{titlepage}
+  \centering
+  {\large Universidad Católica de Salta\par}
+  \medskip
+  {\large Facultad de Ingeniería e Informática\par}
+  {\large Ingeniería en Informática\par}
+  \vfill
+  {\large Trabajo Final Integrador\par}
+  {\large Monografía de investigación\par}
+  \bigskip
+  {\LARGE\bfseries Influencia de la variabilidad de los tiempos de servicio
+    en los sistemas de colas\par}
+  \bigskip
+  {\Large Análisis comparativo y demostración mediante simulación\par}
+  \vfill
+  Integrantes: pendientes de completar\par
+  \medskip
+  Docente: pendiente de completar\par
+  \vfill
+  Modelos y Simulación --- 2026\par
+\end{titlepage}
+
+\tableofcontents
+\clearpage
+
+% Incorporar aquí las siguientes secciones a medida que se redacten.
+% El resumen se escribirá al finalizar el cuerpo del trabajo.
+\input{secciones/01_introduccion}
+\input{secciones/02_objetivos}
+\input{secciones/03_marco_conceptual}
+\input{secciones/04_revision_literatura}
+\input{secciones/05_metodologia}
+
+\clearpage
+\phantomsection
+\addcontentsline{toc}{section}{\refname}
+\bibliographystyle{unsrt}
+\bibliography{referencias}
+
+\end{document}
